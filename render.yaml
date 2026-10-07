@@ -1,4 +1,10 @@
 services:
+  # PostgreSQL Database
+  - type: pserv
+    name: tbb-db
+    plan: free
+    databaseName: tbb
+
   # Django Backend Service
   - type: web
     name: tbb-backend
@@ -49,10 +55,3 @@ services:
       - key: LOG_LEVEL
         value: "INFO"
     healthCheckPath: /api/
-
-  # PostgreSQL Database
-  - type: pserv
-    name: tbb-db
-    plan: free
-    databaseName: tbb
-    user: tbb
