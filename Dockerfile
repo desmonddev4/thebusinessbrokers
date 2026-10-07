@@ -16,7 +16,9 @@ COPY backend/ .
 COPY --from=web /web/dist ./frontend_dist
 RUN chmod +x start.sh
 RUN DJANGO_SECRET_KEY=build-only python manage.py collectstatic --noinput \
- && useradd --system --no-create-home app
+ && useradd --system --no-create-home app \
+ && mkdir -p /app/media \
+ && chown -R app:app /app/media
 USER app
 ENV PORT=8080
 CMD ["./start.sh"]
