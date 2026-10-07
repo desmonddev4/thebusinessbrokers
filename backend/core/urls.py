@@ -1,4 +1,19 @@
 from django.urls import path
 from . import views as v
-urlpatterns = [path("clusters/", v.ClusterList.as_view()), path("desks/", v.DeskList.as_view()),
-    path("people/", v.PersonList.as_view()), path("enquiries/", v.EnquiryCreate.as_view()), path("site/", v.SiteInfo.as_view())]
+urlpatterns = [
+    # Public endpoints
+    path("login/", v.LoginView.as_view()),
+    path("profile/", v.UserProfileView.as_view()),
+    path("clusters/", v.ClusterList.as_view()),
+    path("desks/", v.DeskList.as_view()),
+    path("people/", v.PersonList.as_view()),
+    path("enquiries/", v.EnquiryCreate.as_view()),
+    path("site/", v.SiteInfo.as_view()),
+    # Admin endpoints (require authentication)
+    path("admin/desks/", v.DeskListAdmin.as_view()),
+    path("admin/desks/<int:pk>/", v.DeskDetailAdmin.as_view()),
+    path("admin/people/", v.PersonListAdmin.as_view()),
+    path("admin/people/<int:pk>/", v.PersonDetailAdmin.as_view()),
+    path("admin/enquiries/", v.EnquiryListAdmin.as_view()),
+    path("admin/enquiries/<int:pk>/", v.EnquiryDetailAdmin.as_view()),
+]

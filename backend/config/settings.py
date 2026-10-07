@@ -14,7 +14,7 @@ ALLOWED_HOSTS = csv(env("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1"))
 CSRF_TRUSTED_ORIGINS = csv(env("CSRF_TRUSTED_ORIGINS", ""))
 
 INSTALLED_APPS = ["django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions",
-    "django.contrib.messages", "django.contrib.staticfiles", "rest_framework", "corsheaders", "core"]
+    "django.contrib.messages", "django.contrib.staticfiles", "rest_framework", "rest_framework.authtoken", "corsheaders", "core"]
 MIDDLEWARE = ["django.middleware.security.SecurityMiddleware", "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware", "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware", "django.middleware.csrf.CsrfViewMiddleware",
@@ -61,7 +61,23 @@ CORS_ALLOWED_ORIGINS = csv(env("CORS_ORIGINS", default_cors))
 CORS_ALLOW_CREDENTIALS = True
 REST_FRAMEWORK = {"DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.ScopedRateThrottle"],
-    "DEFAULT_THROTTLE_RATES": {"enquiry": "5/hour"}}
+    "DEFAULT_THROTTLE_RATES": {"enquiry": "5/hour"},
+    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework_simplejwt.authentication.JWTAuthentication"],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"]}
+
+# JWT Settings
+from datetime import timedelta
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+}
 
 # Behind Google's load balancer, which terminates TLS
 if not DEBUG:

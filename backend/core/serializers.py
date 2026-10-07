@@ -27,3 +27,19 @@ class EnquirySerializer(serializers.ModelSerializer):
     def validate_message(self, v):
         if len(v.strip()) < 10: raise serializers.ValidationError("Tell us a little more about what you are buying, selling or placing.")
         return v.strip()
+
+# Admin serializers for full CRUD
+class DeskAdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Desk
+        fields = "__all__"
+
+class PersonAdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = "__all__"
+
+class EnquiryAdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enquiry
+        fields = "__all__"
