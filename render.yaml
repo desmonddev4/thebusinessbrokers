@@ -27,7 +27,7 @@ services:
       - key: DB_PASSWORD
         value: "IlCEv9pMXJFT6yF20mfw4nEOKVbC4y3C"
       - key: CORS_ORIGINS
-        value: "https://your-vercel-app.vercel.app"
+        value: "https://thebusinessbrokers.vercel.app"
         sync: false
       - key: ENQUIRY_NOTIFY_EMAIL
         value: ""
