@@ -3,7 +3,6 @@ services:
   - type: pserv
     name: tbb-db
     plan: free
-    databaseName: tbb
 
   # Django Backend Service
   - type: web
