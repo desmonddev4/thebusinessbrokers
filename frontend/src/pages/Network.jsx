@@ -21,8 +21,8 @@ export const PersonCard = ({ p }) => (
         className="n-person-photo"
         src={p.photo}
         alt=""
-        width="96"
-        height="96"
+        width="72"
+        height="72"
         loading="lazy"
       />
     ) : (

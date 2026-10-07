@@ -85,10 +85,11 @@
   background: linear-gradient(180deg, transparent 55%, rgba(3, 26, 77, 0.45));
 }
 
-/* ---------- Sticky filter bar (overlaps the hero) ---------- */
+/* ---------- Filter bar (overlaps the hero, scrolls away with the page) ---------- */
 .d-body { padding-bottom: 5rem; }
 .d-bar {
-  position: sticky; top: 74px; z-index: 40;
+  position: relative;        /* was sticky: now scrolls normally with the page */
+  z-index: 2;                /* keeps it above the hero where they overlap */
   margin-top: -4.5rem; padding: 1.1rem;
   border-radius: 22px; background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
@@ -246,7 +247,7 @@
   .d-media::before { transform: translate(10px, 10px); }
 }
 @media (max-width: 640px) {
-  .d-bar { top: 66px; padding: 0.9rem; }
+  .d-bar { padding: 0.9rem; }
   .d-video, .d-media::before { border-radius: 20px; }
   /* chips become one swipeable row instead of wrapping into a tall block */
   .d-chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.3rem; scrollbar-width: none; }

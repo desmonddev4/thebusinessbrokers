@@ -173,10 +173,13 @@
   display: grid; grid-template-columns: 1.6fr 1fr;
   gap: 2.5rem; align-items: start;
 }
+
+/* Person cards (PersonCard from Network.jsx) sit in a compact grid */
 .a-bench {
-  display: grid; gap: 1.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  display: grid; gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
+
 .a-facts {
   position: sticky; top: 100px;
   padding: 1.75rem; border-radius: 22px; background: #fff;
@@ -216,7 +219,7 @@
   font-size: 0.9rem;
 }
 .a-skeleton {
-  height: 180px;
+  height: 150px;            /* matches the compact card size */
   border-radius: 16px;
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
