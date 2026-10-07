@@ -4,6 +4,11 @@ set -e
 # Run database migrations
 python manage.py migrate --noinput
 
+# Create superuser if environment variables are set
+if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_EMAIL" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ]; then
+    python manage.py create_admin
+fi
+
 # Create media directory with proper permissions
 mkdir -p /app/media || true
 

@@ -36,4 +36,10 @@ services:
         value: "website@businessbrokers.com.gh"
       - key: LOG_LEVEL
         value: "INFO"
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: ""
+      - key: DJANGO_SUPERUSER_EMAIL
+        value: ""
+      - key: DJANGO_SUPERUSER_PASSWORD
+        value: ""
     healthCheckPath: /api/site/
