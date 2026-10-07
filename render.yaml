@@ -28,10 +28,8 @@ services:
         value: "IlCEv9pMXJFT6yF20mfw4nEOKVbC4y3C"
       - key: CORS_ORIGINS
         value: "https://thebusinessbrokers.vercel.app"
-        sync: false
       - key: ENQUIRY_NOTIFY_EMAIL
         value: ""
-        sync: false
       - key: EMAIL_BACKEND
         value: "django.core.mail.backends.console.EmailBackend"
       - key: DEFAULT_FROM_EMAIL
