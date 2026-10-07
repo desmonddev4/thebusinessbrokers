@@ -1,4 +1,5 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 import "./AdminLayout.css";
 
 const NAV_ITEMS = [
@@ -10,6 +11,13 @@ const NAV_ITEMS = [
 
 export default function AdminLayout() {
   const location = useLocation();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/admin/login");
+  };
 
   return (
     <div className="admin-layout">
@@ -35,6 +43,15 @@ export default function AdminLayout() {
           ))}
         </nav>
         <div className="admin-sidebar-footer">
+          <div className="admin-user-info">
+            <span>{user?.username || "Admin"}</span>
+          </div>
+          <button onClick={handleLogout} className="admin-logout-btn">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+            </svg>
+            Logout
+          </button>
           <Link to="/" className="admin-back-link">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
