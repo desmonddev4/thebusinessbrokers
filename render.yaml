@@ -13,9 +13,9 @@ services:
       - key: DJANGO_DEBUG
         value: "0"
       - key: DJANGO_ALLOWED_HOSTS
-        value: "*.onrender.com"
+        value: "tbb-backend-a8rq.onrender.com,*.onrender.com"
       - key: CSRF_TRUSTED_ORIGINS
-        value: "https://*.onrender.com"
+        value: "https://tbb-backend-a8rq.onrender.com,https://*.onrender.com"
       - key: DB_HOST
         value: "dpg-db3a1ivlot8c73f415h0-a.oregon-postgres.render.com"
       - key: DB_PORT
