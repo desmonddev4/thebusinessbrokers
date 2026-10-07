@@ -1,0 +1,40 @@
+/* Session-check loader shown while AuthContext verifies the token */
+.pr-loading {
+  --pr-navy-900: var(--navy-900, #031a4d);
+  --pr-navy-700: var(--navy-700, #0a2a6b);
+  --pr-gold-500: var(--gold-500, #e8a317);
+  --pr-gold-300: var(--gold-300, #ffe066);
+
+  box-sizing: border-box;
+  display: grid; place-content: center; justify-items: center; gap: 1.1rem;
+  min-height: 100vh; min-height: 100dvh; padding: 1.5rem;
+  text-align: center; color: #fff;
+  background:
+    radial-gradient(520px 340px at 90% 0%, rgba(10, 91, 211, 0.45), transparent 70%),
+    radial-gradient(420px 300px at 0% 100%, rgba(232, 163, 23, 0.18), transparent 70%),
+    linear-gradient(160deg, var(--pr-navy-700), var(--pr-navy-900));
+}
+.pr-logo-ring {
+  display: grid; place-items: center;
+  width: 88px; height: 88px; border-radius: 50%; background: #fff;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.12), 0 0 0 7px var(--pr-gold-500), 0 18px 40px rgba(0, 0, 0, 0.35);
+  animation: prPulse 1.8s ease-in-out infinite;
+}
+.pr-logo-ring img { display: block; width: 100%; height: 100%; padding: 8px; border-radius: 50%; object-fit: contain; }
+.pr-spinner {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.2); border-top-color: var(--pr-gold-300);
+  animation: prSpin 0.8s linear infinite;
+}
+.pr-loading p { margin: 0; font-size: 0.95rem; color: rgba(255, 255, 255, 0.75); }
+
+@keyframes prSpin { to { transform: rotate(360deg); } }
+@keyframes prPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pr-logo-ring { animation: none; }
+  .pr-spinner { animation-duration: 1.8s; }
+}

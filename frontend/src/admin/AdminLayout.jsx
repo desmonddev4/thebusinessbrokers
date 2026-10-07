@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import "./AdminLayout.css";
@@ -9,57 +10,142 @@ const NAV_ITEMS = [
   { label: "Enquiries", path: "/admin/enquiries", icon: "M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" },
 ];
 
+const ICONS = {
+  menu: "M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z",
+  close: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z",
+  logout: "M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z",
+  back: "M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z",
+};
+
+const Icon = ({ d }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d={d} />
+  </svg>
+);
+
+/* "/admin" only matches itself; other items also match their sub-pages */
+const isActive = (path, pathname) =>
+  path === "/admin"
+    ? pathname === "/admin" || pathname === "/admin/"
+    : pathname === path || pathname.startsWith(path + "/");
+
 export default function AdminLayout() {
   const location = useLocation();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
-  const handleLogout = () => {
-    logout();
+  const username = user?.username || "Admin";
+  const initials = username.slice(0, 2).toUpperCase();
+  const current = NAV_ITEMS.find(i => isActive(i.path, location.pathname));
+
+  // close the mobile menu whenever the route changes
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  // Escape closes it, and the page behind doesn't scroll while it's open
+  useEffect(() => {
+    if (!open) return;
+    const onKey = e => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  const handleLogout = async () => {
+    await logout();
     navigate("/admin/login");
   };
 
   return (
     <div className="admin-layout">
-      <aside className="admin-sidebar">
+      {/* ---------- Mobile top bar ---------- */}
+      <header className="admin-topbar">
+        <button
+          type="button"
+          className="admin-menu-btn"
+          onClick={() => setOpen(true)}
+          aria-label="Open menu"
+          aria-expanded={open}
+          aria-controls="admin-sidebar"
+        >
+          <Icon d={ICONS.menu} />
+        </button>
+        <span className="admin-topbar-title">{current?.label || "TBB Admin"}</span>
+        <span className="admin-topbar-avatar" aria-hidden="true">{initials}</span>
+      </header>
+
+      {/* dim backdrop behind the mobile menu */}
+      <div
+        className={`admin-overlay${open ? " show" : ""}`}
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+      />
+
+      {/* ---------- Sidebar ---------- */}
+      <aside id="admin-sidebar" className={`admin-sidebar${open ? " open" : ""}`}>
         <div className="admin-sidebar-header">
           <Link to="/" className="admin-logo">
-            <img src="/logo2.jpeg" alt="" width="32" height="32" />
-            <span>TBB Admin</span>
+            <span className="admin-logo-ring">
+              <img src="/logo2.jpeg" alt="" width="40" height="40" />
+            </span>
+            <span className="admin-logo-text">
+              TBB Admin
+              <small>Content manager</small>
+            </span>
           </Link>
+          <button
+            type="button"
+            className="admin-close-btn"
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+          >
+            <Icon d={ICONS.close} />
+          </button>
         </div>
-        <nav className="admin-nav">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`admin-nav-item ${location.pathname === item.path ? "active" : ""}`}
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d={item.icon} />
-              </svg>
-              {item.label}
-            </Link>
-          ))}
+
+        <nav className="admin-nav" aria-label="Admin">
+          <span className="admin-nav-label">Menu</span>
+          {NAV_ITEMS.map(item => {
+            const active = isActive(item.path, location.pathname);
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`admin-nav-item${active ? " active" : ""}`}
+                aria-current={active ? "page" : undefined}
+              >
+                <Icon d={item.icon} />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
         </nav>
+
         <div className="admin-sidebar-footer">
           <div className="admin-user-info">
-            <span>{user?.username || "Admin"}</span>
+            <span className="admin-avatar" aria-hidden="true">{initials}</span>
+            <span className="admin-user-text">
+              <small>Signed in as</small>
+              <strong>{username}</strong>
+            </span>
           </div>
-          <button onClick={handleLogout} className="admin-logout-btn">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
-            </svg>
+          <button type="button" onClick={handleLogout} className="admin-logout-btn">
+            <Icon d={ICONS.logout} />
             Logout
           </button>
           <Link to="/" className="admin-back-link">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-            </svg>
+            <Icon d={ICONS.back} />
             Back to website
           </Link>
         </div>
       </aside>
+
       <main className="admin-main">
         <Outlet />
       </main>
