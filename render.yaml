@@ -36,4 +36,4 @@ services:
         value: "website@businessbrokers.com.gh"
       - key: LOG_LEVEL
         value: "INFO"
-    healthCheckPath: /api/
+    healthCheckPath: /api/site/
