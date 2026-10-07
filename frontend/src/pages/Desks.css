@@ -1,0 +1,259 @@
+/* ---------- Reveal animation ---------- */
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition-delay: var(--d, 0ms);
+}
+.reveal.in { opacity: 1; transform: none; }
+
+/* ---------- Eyebrow ---------- */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-size: 0.8rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold-300);
+}
+.eyebrow::before {
+  content: ""; width: 28px; height: 2px; border-radius: 2px;
+  background: var(--gold-grad);
+}
+
+/* ---------- Hero ---------- */
+.d-hero {
+  position: relative; overflow: hidden;
+  padding: 4rem 0 9rem; color: #fff;
+  background:
+    radial-gradient(520px 340px at 90% 0%, rgba(10, 91, 211, 0.45), transparent 70%),
+    radial-gradient(420px 300px at 0% 100%, rgba(232, 163, 23, 0.16), transparent 70%),
+    linear-gradient(160deg, var(--navy-700), var(--navy-900));
+}
+.d-hero::before {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, #000, transparent 85%);
+  pointer-events: none;
+}
+.d-hero-in {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: 3.5rem; align-items: center;
+}
+.d-copy { max-width: 600px; }
+.d-copy > * { animation: riseIn 0.7s ease both; }
+.d-copy > :nth-child(2) { animation-delay: 0.12s; }
+.d-copy > :nth-child(3) { animation-delay: 0.24s; }
+.d-hero h1 {
+  margin: 1rem 0; font-size: clamp(2.3rem, 5.5vw, 3.8rem);
+  line-height: 1.08; letter-spacing: -0.02em;
+}
+.d-lede {
+  margin: 0; max-width: 58ch; font-size: 1.15rem; line-height: 1.7;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* ---------- Banner video (right side) ---------- */
+.d-media {
+  position: relative;
+  animation: riseIn 0.8s 0.25s ease both;
+}
+/* gold offset frame behind the video */
+.d-media::before {
+  content: ""; position: absolute; inset: 0;
+  transform: translate(18px, 18px);
+  border-radius: 28px;
+  border: 2px solid var(--gold-500);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.d-video {
+  position: relative; z-index: 1;
+  aspect-ratio: 16 / 10;
+  border-radius: 28px; overflow: hidden;
+  background: var(--navy-900);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.4);
+}
+.d-video video {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover;
+}
+.d-video::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, transparent 55%, rgba(3, 26, 77, 0.45));
+}
+
+/* ---------- Sticky filter bar (overlaps the hero) ---------- */
+.d-body { padding-bottom: 5rem; }
+.d-bar {
+  position: sticky; top: 74px; z-index: 40;
+  margin-top: -4.5rem; padding: 1.1rem;
+  border-radius: 22px; background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border-top: 3px solid var(--gold-500);
+  box-shadow: 0 20px 50px rgba(3, 26, 77, 0.18);
+}
+
+.d-search {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.25rem 0.5rem 0.25rem 1rem;
+  border-radius: 999px; background: #f3f6fc;
+  border: 2px solid transparent;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.d-search:focus-within {
+  background: #fff; border-color: var(--gold-500);
+  box-shadow: 0 0 0 4px rgba(255, 224, 102, 0.45);
+}
+.d-search svg { flex: none; width: 22px; height: 22px; fill: var(--navy-700); opacity: 0.6; }
+.d-search input {
+  flex: 1; min-width: 0; padding: 0.75rem 0;
+  border: 0; outline: 0; background: transparent;
+  font-size: 1rem; color: var(--navy-900);
+  appearance: none; -webkit-appearance: none;
+}
+.d-search input::-webkit-search-cancel-button { display: none; } /* we draw our own clear button */
+.d-search input::placeholder { color: rgba(3, 26, 77, 0.5); }
+.d-clear {
+  flex: none; width: 32px; height: 32px; border: 0; border-radius: 50%; cursor: pointer;
+  font-size: 1.3rem; line-height: 1; color: var(--navy-900);
+  background: rgba(3, 26, 77, 0.08);
+  transition: background 0.25s, transform 0.25s;
+}
+.d-clear:hover { background: var(--gold-grad); transform: rotate(90deg); }
+
+/* ---------- Cluster chips ---------- */
+.d-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
+.d-chips button {
+  padding: 0.5rem 1.1rem; border-radius: 999px; cursor: pointer;
+  font-size: 0.9rem; font-weight: 600; color: var(--navy-900);
+  background: #fff; border: 1px solid rgba(3, 26, 77, 0.18);
+  transition: background 0.25s, color 0.25s, transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.d-chips button:hover { transform: translateY(-2px); border-color: var(--gold-500); }
+/* the active filter is styled straight from the aria-pressed attribute */
+.d-chips button[aria-pressed="true"] {
+  color: #fff; border-color: transparent;
+  background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
+  box-shadow: 0 6px 16px rgba(3, 26, 77, 0.3);
+}
+
+.d-count { margin: 1.5rem 0 1.25rem; font-weight: 600; color: var(--navy-700); }
+
+/* ---------- Cards ---------- */
+.d-grid {
+  display: grid; gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+.d-card {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; height: 100%;
+  padding: 1.75rem; border-radius: 20px; background: #fff;
+  border: 1px solid rgba(3, 26, 77, 0.08);
+  box-shadow: 0 4px 16px rgba(3, 26, 77, 0.06);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.d-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: var(--gold-grad);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.d-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(3, 26, 77, 0.16); }
+.d-card:hover::before { transform: scaleX(1); }
+
+.d-top { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+.d-code {
+  padding: 0.25rem 0.7rem; border-radius: 8px;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em;
+  color: #fff; background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
+}
+.d-cluster {
+  padding: 0.25rem 0.7rem; border-radius: 999px;
+  font-size: 0.75rem; font-weight: 600; color: var(--gold-700);
+  background: rgba(232, 163, 23, 0.14);
+}
+.d-card h3 { margin: 0 0 0.4rem; color: var(--navy-900); font-size: 1.25rem; line-height: 1.25; }
+.d-strap { margin: 0 0 0.75rem; font-weight: 600; color: var(--blue-500); }
+.d-desc { margin: 0 0 1.25rem; line-height: 1.65; color: #3a4a70; }
+
+/* ---------- "What this desk handles" dropdown ---------- */
+.d-more { margin-top: auto; border-top: 1px solid rgba(3, 26, 77, 0.1); padding-top: 0.9rem; }
+.d-more summary {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; list-style: none;
+  font-weight: 600; color: var(--navy-900); transition: color 0.25s;
+}
+.d-more summary::-webkit-details-marker { display: none; }
+.d-more summary:hover { color: var(--blue-500); }
+.d-more summary svg { width: 22px; height: 22px; fill: currentColor; transition: transform 0.3s; }
+.d-more[open] summary svg { transform: rotate(180deg); }
+.d-more ul { list-style: none; margin: 0.9rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
+.d-more[open] ul { animation: dropIn 0.35s ease both; }
+.d-more li {
+  position: relative; padding-left: 1.4rem; line-height: 1.5; color: #3a4a70;
+}
+.d-more li::before {
+  content: ""; position: absolute; left: 0; top: 0.55em;
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold-grad);
+}
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- Shared button ---------- */
+.btn-gold {
+  position: relative; overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0.85rem 1.6rem; border-radius: 999px;
+  font-weight: 600; font-size: 1rem; text-decoration: none;
+  border: 0; cursor: pointer;
+  color: var(--navy-900);
+  background: var(--gold-grad);
+  background-size: 200% 100%;
+  box-shadow: 0 6px 18px rgba(232, 163, 23, 0.35);
+  transition: transform 0.25s, box-shadow 0.25s, background-position 0.5s;
+}
+.btn-gold:hover {
+  transform: translateY(-2px);
+  background-position: 100% 0;
+  box-shadow: 0 10px 26px rgba(232, 163, 23, 0.5);
+}
+.btn-gold:active { transform: translateY(0); }
+
+/* ---------- Loading / empty ---------- */
+.d-skel {
+  height: 220px; border-radius: 20px;
+  background: linear-gradient(90deg, #eef2fa 25%, #e1e8f6 50%, #eef2fa 75%);
+  background-size: 200% 100%; animation: shimmer 1.4s infinite;
+}
+.d-empty {
+  display: grid; justify-items: center; gap: 1.25rem;
+  max-width: 520px; margin: 2rem auto; padding: 3rem 2rem; text-align: center;
+  border-radius: 24px; background: #f3f6fc; border: 2px dashed rgba(3, 26, 77, 0.15);
+}
+.d-empty svg { width: 52px; height: 52px; fill: var(--gold-500); }
+.d-empty p { margin: 0; line-height: 1.7; color: #3a4a70; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .d-hero { padding: 2.5rem 0 8rem; }
+  .d-hero-in { grid-template-columns: 1fr; gap: 2.5rem; }
+  .d-media { margin-right: 10px; }
+  .d-media::before { transform: translate(10px, 10px); }
+}
+@media (max-width: 640px) {
+  .d-bar { top: 66px; padding: 0.9rem; }
+  .d-video, .d-media::before { border-radius: 20px; }
+  /* chips become one swipeable row instead of wrapping into a tall block */
+  .d-chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.3rem; scrollbar-width: none; }
+  .d-chips::-webkit-scrollbar { display: none; }
+  .d-chips button { flex: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .d-copy > *, .d-media, .d-more[open] ul, .d-skel { animation: none; }
+}

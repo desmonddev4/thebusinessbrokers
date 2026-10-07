@@ -1,0 +1,12 @@
+node_modules/
+dist/
+__pycache__/
+*.pyc
+backend/media/
+backend/staticfiles/
+backend/frontend_dist/
+.env
+.env.local
+.env.*.local
+.venv/
+.vercel/

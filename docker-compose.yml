@@ -1,0 +1,8 @@
+# Local development database: `docker compose up -d db`, then run Django and Vite as described in the README.
+services:
+  db:
+    image: postgres:16
+    environment: { POSTGRES_DB: tbb, POSTGRES_USER: tbb, POSTGRES_PASSWORD: tbb }
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+volumes: { pgdata: {} }

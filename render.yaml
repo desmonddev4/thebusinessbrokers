@@ -1,0 +1,58 @@
+services:
+  # Django Backend Service
+  - type: web
+    name: tbb-backend
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    # Note: Media files are not persistent on free plan. Upgrade to Standard with disk mount for production.
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "0"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "*.onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://*.onrender.com"
+      - key: DB_HOST
+        fromDatabase:
+          name: tbb-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: tbb-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: tbb-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: tbb-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: tbb-db
+          property: password
+      - key: CORS_ORIGINS
+        value: "https://your-vercel-app.vercel.app"
+        sync: false
+      - key: ENQUIRY_NOTIFY_EMAIL
+        value: ""
+        sync: false
+      - key: EMAIL_BACKEND
+        value: "django.core.mail.backends.console.EmailBackend"
+      - key: DEFAULT_FROM_EMAIL
+        value: "website@businessbrokers.com.gh"
+      - key: LOG_LEVEL
+        value: "INFO"
+    healthCheckPath: /api/
+
+  # PostgreSQL Database
+  - type: pserv
+    name: tbb-db
+    plan: free
+    databaseName: tbb
+    user: tbb

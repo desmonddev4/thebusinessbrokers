@@ -1,0 +1,159 @@
+/* ==========================================================
+   Contact page
+   Relies on shared globals: --navy-*, --gold-* tokens, .wrap,
+   .eyebrow, .reveal / .in, .btn-gold, riseIn
+   ========================================================== */
+
+/* ---------- Page / hero ---------- */
+.c-hero {
+  position: relative; overflow: hidden;
+  padding: 5rem 0 6rem; color: #fff;
+  background:
+    radial-gradient(520px 340px at 90% 0%, rgba(10, 91, 211, 0.45), transparent 70%),
+    radial-gradient(420px 300px at 0% 100%, rgba(232, 163, 23, 0.16), transparent 70%),
+    linear-gradient(160deg, var(--navy-700), var(--navy-900));
+}
+.c-hero::before {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, #000, transparent 85%);
+  pointer-events: none;
+}
+.c-hero .wrap { position: relative; z-index: 1; }
+
+.c-grid {
+  display: grid; grid-template-columns: 1fr 1.05fr;
+  gap: 4rem; align-items: start;
+}
+
+/* ---------- Left column ---------- */
+.c-intro { position: sticky; top: 110px; }
+.c-intro h1 {
+  margin: 1rem 0; font-size: clamp(2.3rem, 5vw, 3.4rem);
+  line-height: 1.08; letter-spacing: -0.02em;
+}
+.c-lede {
+  margin: 0 0 2.25rem; max-width: 52ch; font-size: 1.1rem; line-height: 1.75;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.c-details { display: grid; gap: 1.1rem; }
+.c-detail {
+  display: flex; gap: 1.1rem; align-items: flex-start;
+  padding: 1.4rem 1.5rem; border-radius: 20px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  transition: transform 0.3s, background 0.3s, border-color 0.3s;
+}
+.c-detail:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(255, 224, 102, 0.45);
+}
+.c-detail-ico {
+  flex: none; display: grid; place-items: center;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--gold-grad);
+}
+.c-detail-ico svg { width: 20px; height: 20px; fill: var(--navy-900); }
+.c-detail address,
+.c-detail p {
+  margin: 0; display: grid; font-style: normal;
+  line-height: 1.65; color: rgba(255, 255, 255, 0.78);
+}
+.c-detail b {
+  margin-bottom: 0.3rem; font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-300);
+}
+.c-detail a {
+  width: fit-content; color: #fff; font-weight: 600; text-decoration: none;
+  border-bottom: 1px solid transparent; transition: color 0.25s, border-color 0.25s;
+}
+.c-detail a:hover,
+.c-detail a:focus-visible { color: var(--gold-300); border-color: var(--gold-300); outline: none; }
+
+/* ---------- Form card ---------- */
+.c-card {
+  padding: 2.5rem; border-radius: 28px; background: #fff;
+  border: 1px solid rgba(3, 26, 77, 0.08);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+.c-form-title { margin: 0 0 1.5rem; color: var(--navy-900); font-size: 1.6rem; }
+
+.c-field { display: grid; gap: 0.45rem; margin-bottom: 1.25rem; }
+.c-field > span { font-size: 0.9rem; font-weight: 600; color: var(--navy-900); }
+.c-field input,
+.c-field select,
+.c-field textarea {
+  width: 100%; padding: 0.85rem 1rem; border-radius: 14px;
+  font: inherit; color: var(--navy-900);
+  background: #f6f8fd; border: 1.5px solid rgba(3, 26, 77, 0.12);
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.c-field textarea { resize: vertical; min-height: 130px; line-height: 1.6; }
+.c-field select {
+  appearance: none; cursor: pointer; padding-right: 2.6rem;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23031a4d' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat: no-repeat; background-position: right 0.9rem center; background-size: 18px;
+}
+.c-field input:hover,
+.c-field select:hover,
+.c-field textarea:hover { border-color: rgba(3, 26, 77, 0.3); }
+.c-field input:focus,
+.c-field select:focus,
+.c-field textarea:focus {
+  outline: none; background: #fff;
+  border-color: var(--gold-500);
+  box-shadow: 0 0 0 4px rgba(232, 163, 23, 0.2);
+}
+.c-field [aria-invalid="true"] { border-color: #c63d3d; background: #fff8f8; }
+.c-field [aria-invalid="true"]:focus { box-shadow: 0 0 0 4px rgba(198, 61, 61, 0.18); }
+
+/* errors */
+.c-err {
+  margin: -0.65rem 0 1.25rem; font-size: 0.88rem; font-weight: 500; line-height: 1.5;
+  color: #b02a2a;
+}
+.c-err-box {
+  margin: 0 0 1.25rem; padding: 0.85rem 1rem; border-radius: 14px;
+  background: #fdeeee; border-left: 3px solid #c63d3d;
+}
+
+/* honeypot: hidden from people, present for bots */
+.c-hp {
+  position: absolute !important; left: -9999px; width: 1px; height: 1px;
+  opacity: 0; pointer-events: none;
+}
+
+/* submit */
+.c-submit { width: 100%; margin-top: 0.5rem; padding: 1rem 1.6rem; font-size: 1.05rem; }
+.c-submit:disabled { opacity: 0.65; cursor: progress; transform: none; box-shadow: none; }
+
+/* success */
+.c-ok { padding: 2rem 0.5rem; text-align: center; }
+.c-ok-ico {
+  display: grid; place-items: center; width: 64px; height: 64px;
+  margin: 0 auto 1.25rem; border-radius: 50%; background: var(--gold-grad);
+  box-shadow: 0 10px 26px rgba(232, 163, 23, 0.4);
+}
+.c-ok-ico svg { width: 30px; height: 30px; fill: var(--navy-900); }
+.c-ok h2 { margin: 0 0 0.5rem; color: var(--navy-900); font-size: 1.7rem; }
+.c-ok p { margin: 0; line-height: 1.7; color: #3a4a70; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .c-hero { padding: 3.5rem 0 4.5rem; }
+  .c-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .c-intro { position: static; }
+}
+@media (max-width: 520px) {
+  .c-card { padding: 1.75rem 1.4rem; border-radius: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-detail, .c-field input, .c-field select, .c-field textarea { transition: none; }
+}

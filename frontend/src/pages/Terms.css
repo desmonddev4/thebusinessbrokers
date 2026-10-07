@@ -1,0 +1,122 @@
+.terms-page {
+  min-height: 100vh;
+  background: var(--navy-50);
+}
+
+.terms-hero {
+  padding: 4rem 0 3rem;
+  background:
+    radial-gradient(600px 400px at 85% 10%, rgba(10, 91, 211, 0.15), transparent 70%),
+    linear-gradient(180deg, #fff 0%, var(--navy-50) 100%);
+}
+
+.terms-hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--navy-900);
+  margin: 0.5rem 0;
+}
+
+.terms-meta {
+  color: var(--navy-700);
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+
+.terms-content {
+  max-width: 800px;
+  padding: 3rem 0 6rem;
+}
+
+.terms-intro {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.terms-intro p {
+  line-height: 1.8;
+  color: var(--navy-900);
+  margin-bottom: 1rem;
+}
+
+.terms-intro p:last-child {
+  margin-bottom: 0;
+}
+
+.terms-section {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+.terms-section h2 {
+  font-size: 1.5rem;
+  color: var(--navy-900);
+  margin: 0 0 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--gold-500);
+}
+
+.terms-section p {
+  line-height: 1.8;
+  color: var(--navy-900);
+  margin-bottom: 1rem;
+}
+
+.terms-section ul {
+  margin: 0 0 1rem 1.5rem;
+  padding: 0;
+}
+
+.terms-section li {
+  line-height: 1.8;
+  color: var(--navy-900);
+  margin-bottom: 0.5rem;
+}
+
+.terms-contact {
+  background: var(--navy-50);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin: 1rem 0;
+}
+
+.terms-contact p {
+  margin: 0.5rem 0;
+  color: var(--navy-900);
+}
+
+.terms-contact strong {
+  color: var(--navy-900);
+}
+
+.terms-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--navy-200);
+  color: var(--navy-700);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .terms-hero {
+    padding: 3rem 0 2rem;
+  }
+
+  .terms-content {
+    padding: 2rem 0 4rem;
+  }
+
+  .terms-intro,
+  .terms-section {
+    padding: 1.5rem;
+  }
+
+  .terms-section h2 {
+    font-size: 1.25rem;
+  }
+}

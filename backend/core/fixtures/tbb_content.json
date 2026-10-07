@@ -1,0 +1,625 @@
+{
+ "clusters": {
+  "capital": "Capital and risk",
+  "property": "Property and land",
+  "trade": "Commodities and trade",
+  "services": "Hospitality and people",
+  "specialist": "Technology and specialist"
+ },
+ "cluster_full": {
+  "capital": "Financial, Capital and Risk",
+  "property": "Property, Land and Built Assets",
+  "trade": "Commodities, Resources, Energy and Trade",
+  "services": "Hospitality, People and Human Services",
+  "specialist": "Technology, Media and Specialist Assets"
+ },
+ "desks": [
+  {
+   "code": "FIBD",
+   "name": "Financial and Investment",
+   "cluster": "capital",
+   "strapline": "Capital Raising | Investment Placement | Deal Origination",
+   "description": "FIBD connects capital to opportunity. The division works with businesses seeking funding and with investors seeking credible, well prepared opportunities to deploy into, and it does the unglamorous work in between: preparing the information memorandum, testing the numbers, and making sure both sides are looking at the same set of facts before a term sheet is drafted.",
+   "focus_areas": [
+    "Debt and equity capital raising for SMEs, corporates and project sponsors",
+    "Investor identification, screening and introduction",
+    "Preparation of information memoranda, teasers and investor packs",
+    "Securities placement and capital markets introductions",
+    "Fund sourcing for public sector and development projects",
+    "Financial modelling, valuation support and deal structuring advice"
+   ]
+  },
+  {
+   "code": "IRBD",
+   "name": "Insurance and Reinsurance",
+   "cluster": "capital",
+   "strapline": "Risk Placement | Cover Design | Claims Advocacy",
+   "description": "Insurance is bought badly far more often than it is bought well. IRBD represents the client, not the underwriter, and that distinction shapes everything the division does. We assess exposure first, design the cover around the actual risk profile, then take the programme to the market and negotiate on price and terms.",
+   "focus_areas": [
+    "Risk audit, exposure mapping and cover gap analysis",
+    "General, life, health and group scheme placement",
+    "Construction all risks, contractors plant and erection all risks",
+    "Marine, aviation, cargo and goods in transit cover",
+    "Agricultural, index based and parametric insurance",
+    "Reinsurance placement and facultative arrangements",
+    "Claims preparation, negotiation and settlement advocacy"
+   ]
+  },
+  {
+   "code": "BMAD",
+   "name": "Business Sales, Mergers and Acquisitions",
+   "cluster": "capital",
+   "strapline": "Business Sales | Acquisitions | Succession Transactions",
+   "description": "BMAD is business brokerage in its classic form. The division represents owners selling all or part of a business, buyers looking for a going concern, and families working through succession where the next generation is not ready or not interested.",
+   "focus_areas": [
+    "Business valuation and saleability assessment",
+    "Confidential marketing and buyer screening",
+    "Mergers, acquisitions, divestments and management buyouts",
+    "Joint venture and strategic partnership brokerage",
+    "Succession and exit planning for owner managed businesses",
+    "Due diligence coordination and completion management"
+   ]
+  },
+  {
+   "code": "DTFD",
+   "name": "Debt, Trade Finance and Structured Credit",
+   "cluster": "capital",
+   "strapline": "Working Capital | Trade Instruments | Debt Restructuring",
+   "description": "Many otherwise sound businesses fail on liquidity rather than on strategy. DTFD sources and structures the credit that keeps trade moving, from invoice discounting and receivables finance to letters of credit, guarantees and bonds.",
+   "focus_areas": [
+    "Working capital, overdraft and term loan placement",
+    "Letters of credit, bank guarantees, bid and performance bonds",
+    "Invoice discounting, factoring and receivables finance",
+    "Asset finance and lease brokerage",
+    "Debt restructuring, refinancing and settlement negotiation",
+    "Supply chain and distributor finance arrangements"
+   ]
+  },
+  {
+   "code": "REPD",
+   "name": "Real Estate and Property",
+   "cluster": "property",
+   "strapline": "Sales | Lettings | Property Advisory",
+   "description": "REPD handles the sale, purchase, letting and management of residential, commercial, industrial and institutional property. The division is built on a simple commitment: we do not market a property whose title we have not examined, and we tell clients what we find.",
+   "focus_areas": [
+    "Residential and commercial sales and purchase brokerage",
+    "Office, retail, warehouse and industrial lettings",
+    "Title verification, searches and documentation support",
+    "Rental valuation, market appraisal and pricing advice",
+    "Property and facilities management arrangements",
+    "Sale and leaseback and investment property placement",
+    "Diaspora property acquisition and custodial services"
+   ]
+  },
+  {
+   "code": "CIPD",
+   "name": "Construction, Infrastructure and Project",
+   "cluster": "property",
+   "strapline": "Project Matching | Contractor Sourcing | PPP Facilitation",
+   "description": "CIPD draws directly on the firm's built environment heritage. The division brings together project sponsors, contractors, consultants, financiers and public authorities, and structures the commercial relationships that allow an infrastructure project to actually reach financial close.",
+   "focus_areas": [
+    "Contractor, consultant and subcontractor sourcing and matching",
+    "Project sponsorship, equity participation and consortium formation",
+    "Public private partnership and concession facilitation",
+    "Tender identification, bid partnering and prequalification support",
+    "Project finance introduction and sponsor investor matching",
+    "Contract negotiation support and commercial structuring"
+   ]
+  },
+  {
+   "code": "LAAD",
+   "name": "Land, Agricultural Estates and Agribusiness",
+   "cluster": "property",
+   "strapline": "Land Assembly | Estates | Agribusiness Ventures",
+   "description": "Land is the asset most often mishandled and most frequently litigated. LAAD brokers land transactions with a strong emphasis on customary process, verified documentation and stakeholder consent, working with families, stools, skins and statutory bodies as the situation requires.",
+   "focus_areas": [
+    "Land identification, assembly and acquisition brokerage",
+    "Customary land negotiation with traditional authorities",
+    "Title search, documentation and registration facilitation",
+    "Agricultural estate, plantation and concession transactions",
+    "Outgrower, nucleus farm and offtake partnership brokerage",
+    "Agribusiness investment matching and venture structuring"
+   ]
+  },
+  {
+   "code": "PEMD",
+   "name": "Plant, Equipment and Machinery",
+   "cluster": "property",
+   "strapline": "Capital Equipment | Plant Hire | Asset Disposal",
+   "description": "PEMD sources, places and disposes of capital equipment. Whether a contractor needs an excavator for a nine month contract, a processor needs a production line, or an insolvent operation needs its assets converted to cash, the division handles the search, the verification and the commercial terms.",
+   "focus_areas": [
+    "New and used plant and machinery sourcing",
+    "Construction, mining and agricultural equipment brokerage",
+    "Plant hire, leasing and short term equipment placement",
+    "Industrial and processing line procurement",
+    "Asset disposal, auction coordination and salvage sales",
+    "Equipment valuation, inspection and condition reporting"
+   ]
+  },
+  {
+   "code": "CPBD",
+   "name": "Commodity and Produce",
+   "cluster": "trade",
+   "strapline": "Agricultural Commodities | Offtake | Supply Contracts",
+   "description": "CPBD matches producers, aggregators, processors and buyers across the agricultural value chain. The division brokers spot sales, forward contracts and structured offtake agreements in cocoa, cashew, shea, grains, oil palm, poultry, fish and horticultural produce.",
+   "focus_areas": [
+    "Producer to processor and processor to buyer matching",
+    "Spot, forward and structured offtake contract brokerage",
+    "Export commodity placement and international buyer sourcing",
+    "Quality, grading and certification coordination",
+    "Aggregation, warehousing and storage arrangements",
+    "Price discovery, market intelligence and contract administration"
+   ]
+  },
+  {
+   "code": "MMND",
+   "name": "Mining, Minerals and Natural Resources",
+   "cluster": "trade",
+   "strapline": "Concessions | Mineral Trade | Resource Partnerships",
+   "description": "MMND operates in a sector where regulation, community relations and technical verification determine whether a transaction is sound. The division brokers concession interests, joint ventures, service contracts and mineral offtake, always within the licensing framework and always with attention to host community obligations.",
+   "focus_areas": [
+    "Mining concession and licence interest brokerage",
+    "Joint venture, farm in and partnership structuring",
+    "Mineral offtake and refinery placement arrangements",
+    "Mining services, contractor and supplier matching",
+    "Quarry, aggregate and industrial minerals transactions",
+    "Regulatory, licensing and community engagement facilitation"
+   ]
+  },
+  {
+   "code": "EPPD",
+   "name": "Energy, Power and Petroleum",
+   "cluster": "trade",
+   "strapline": "Power Projects | Fuel Supply | Renewables",
+   "description": "EPPD works across conventional and renewable energy. The division brokers power purchase arrangements, independent power project partnerships, solar and mini grid installations, fuel supply contracts and distribution agreements.",
+   "focus_areas": [
+    "Independent power project partnering and sponsor matching",
+    "Power purchase and energy supply agreement facilitation",
+    "Solar, mini grid and distributed generation brokerage",
+    "Petroleum product supply, bulk distribution and haulage contracts",
+    "LPG, biomass and alternative fuel arrangements",
+    "Energy efficiency retrofit and performance contract brokerage"
+   ]
+  },
+  {
+   "code": "CCED",
+   "name": "Carbon, Climate and Environmental Markets",
+   "cluster": "trade",
+   "strapline": "Carbon Credits | Climate Finance | Environmental Assets",
+   "description": "CCED is the firm's newest and fastest growing practice. The division brokers carbon credits, project development rights and climate finance across voluntary and compliance markets, and it advises sellers on how to reach an investable standard before they approach buyers.",
+   "focus_areas": [
+    "Carbon credit origination, aggregation and sale",
+    "Voluntary and Article 6 compliance market placement",
+    "Climate finance and green fund introduction",
+    "REDD plus, reforestation and clean cookstove project brokerage",
+    "Plastic credit, waste recovery and circular economy transactions",
+    "Verification, registry and benefit sharing coordination"
+   ]
+  },
+  {
+   "code": "FSLD",
+   "name": "Freight, Shipping and Logistics",
+   "cluster": "trade",
+   "strapline": "Cargo | Chartering | Supply Chain Matching",
+   "description": "FSLD arranges the movement of goods. The division brokers freight capacity across road, sea, air and rail, negotiates rates, matches shippers with carriers, and coordinates the warehousing and last mile arrangements that complete a delivery.",
+   "focus_areas": [
+    "Road, sea, air and multimodal freight brokerage",
+    "Vessel, vehicle and aircraft chartering arrangements",
+    "Container, bulk and project cargo placement",
+    "Warehousing, bonded storage and distribution arrangements",
+    "Freight rate negotiation and framework contracting",
+    "Cold chain and specialised cargo handling"
+   ]
+  },
+  {
+   "code": "IETD",
+   "name": "Import, Export and Trade Facilitation",
+   "cluster": "trade",
+   "strapline": "Cross Border Trade | Customs | Market Entry",
+   "description": "IETD helps Ghanaian businesses sell abroad and helps foreign businesses buy and sell here. The division sources counterparties, negotiates trade terms, and manages the documentary and customs process that trips up so many first time exporters.",
+   "focus_areas": [
+    "Export buyer sourcing and international market entry support",
+    "Import supplier identification, vetting and negotiation",
+    "Customs clearance, documentation and compliance facilitation",
+    "AfCFTA and regional trade opportunity brokerage",
+    "Distributorship, agency and representation agreements",
+    "Trade mission, buyer delegation and exhibition coordination"
+   ]
+  },
+  {
+   "code": "HTED",
+   "name": "Hospitality, Tourism and Events",
+   "cluster": "services",
+   "strapline": "Hotels | Tourism Assets | Event Contracting",
+   "description": "HTED brokers hospitality assets and hospitality services. On the asset side the division handles hotel and lodge sales, leases, management contracts and franchise arrangements. On the services side it places conference business, group accommodation, catering contracts and event venues.",
+   "focus_areas": [
+    "Hotel, guest house, lodge and resort sales and leases",
+    "Hotel management contract and brand affiliation brokerage",
+    "Restaurant, bar and catering business transactions",
+    "Conference, banquet and event venue placement",
+    "Group accommodation, travel and tour package brokerage",
+    "Tourism asset investment matching and operator sourcing",
+    "Hospitality staffing, supply and service contract brokerage"
+   ]
+  },
+  {
+   "code": "HCTD",
+   "name": "Human Capital and Talent",
+   "cluster": "services",
+   "strapline": "Executive Search | Contract Staffing | Workforce Supply",
+   "description": "HCTD places people. The division runs executive searches, supplies contract and project based labour, and manages outsourced workforce arrangements for clients who need capacity without permanent headcount.",
+   "focus_areas": [
+    "Executive search and senior appointment brokerage",
+    "Professional, technical and skilled trades recruitment",
+    "Contract, project and seasonal labour supply",
+    "Managed outsourcing and payroll arrangements",
+    "Expatriate placement, permits and relocation coordination",
+    "Credential verification, referencing and background checks"
+   ]
+  },
+  {
+   "code": "ETSD",
+   "name": "Education, Training and Student Placement",
+   "cluster": "services",
+   "strapline": "Study Placement | Scholarships | Institutional Partnerships",
+   "description": "ETSD connects learners with institutions and institutions with each other. The division places students in local and international programmes, brokers scholarship and sponsorship opportunities, and arranges partnerships between schools, universities and training providers.",
+   "focus_areas": [
+    "Local and international study placement and admissions support",
+    "Scholarship, bursary and sponsorship brokerage",
+    "Institutional partnership, affiliation and franchise arrangements",
+    "Corporate training provider sourcing and matching",
+    "Internship, attachment and graduate placement brokerage",
+    "Education asset transactions including school sales and leases"
+   ]
+  },
+  {
+   "code": "HMWD",
+   "name": "Health, Medical and Wellness Services",
+   "cluster": "services",
+   "strapline": "Medical Referral | Health Assets | Equipment Supply",
+   "description": "HMWD brokers arrangements across the health sector, from medical referral and treatment abroad to the sale of clinics and the supply of equipment and consumables.",
+   "focus_areas": [
+    "Medical referral and treatment abroad facilitation",
+    "Clinic, pharmacy, laboratory and diagnostic centre transactions",
+    "Medical equipment, device and consumable supply brokerage",
+    "Corporate health scheme and HMO placement",
+    "Health investment and facility development partnerships",
+    "Wellness, fitness and care service contracting"
+   ]
+  },
+  {
+   "code": "TIPD",
+   "name": "Technology, Intellectual Property and Innovation",
+   "cluster": "specialist",
+   "strapline": "IP Licensing | Technology Transfer | Digital Assets",
+   "description": "TIPD brokers knowledge and the rights attached to it. The division licenses intellectual property, arranges technology transfer between research institutions and industry, and matches software, platforms and digital businesses with buyers and investors.",
+   "focus_areas": [
+    "Patent, trademark and intellectual property licensing",
+    "Technology transfer and commercialisation of research",
+    "Software, platform and digital business transactions",
+    "ICT infrastructure, hardware and systems procurement brokerage",
+    "Innovation partnership and research collaboration matching",
+    "Domain, data and digital asset transactions"
+   ]
+  },
+  {
+   "code": "MASD",
+   "name": "Media, Advertising and Sponsorship",
+   "cluster": "specialist",
+   "strapline": "Media Buying | Sponsorship | Brand Partnerships",
+   "description": "MASD sits between brands and the platforms that reach audiences. The division negotiates media buying arrangements, brokers sponsorship and endorsement deals, and structures brand partnerships across broadcast, print, outdoor and digital channels.",
+   "focus_areas": [
+    "Media buying, airtime and advertising space negotiation",
+    "Sponsorship, naming rights and endorsement brokerage",
+    "Outdoor, billboard and experiential placement",
+    "Digital, influencer and content partnership arrangements",
+    "Production, creative and agency service sourcing",
+    "Media asset and station transaction brokerage"
+   ]
+  },
+  {
+   "code": "TAMD",
+   "name": "Transport, Automotive, Marine and Aviation",
+   "cluster": "specialist",
+   "strapline": "Vehicles | Vessels | Aircraft",
+   "description": "TAMD brokers moving assets. The division handles fleet acquisition and disposal, commercial vehicle sourcing, vessel and boat transactions, and aircraft charter and acquisition arrangements.",
+   "focus_areas": [
+    "Fleet acquisition, replacement and disposal brokerage",
+    "Commercial vehicle, bus and haulage unit sourcing",
+    "Vehicle leasing, hire purchase and rental arrangements",
+    "Marine vessel, boat and barge transactions",
+    "Aircraft charter, lease and acquisition facilitation",
+    "Vehicle inspection, valuation and documentation verification"
+   ]
+  },
+  {
+   "code": "FLDD",
+   "name": "Franchise, Licensing and Distribution",
+   "cluster": "specialist",
+   "strapline": "Franchise Rights | Territory Licensing | Distributorships",
+   "description": "FLDD brings established brands into new territories and helps local brands expand through structured replication. The division brokers franchise rights, master licences, territory agreements and exclusive distributorships.",
+   "focus_areas": [
+    "Franchise and master franchise rights brokerage",
+    "Territory licensing and area development agreements",
+    "Exclusive and non exclusive distributorship arrangements",
+    "Brand licensing and merchandising agreements",
+    "Franchisee assessment, matching and onboarding support",
+    "Franchise system development for expanding local brands"
+   ]
+  },
+  {
+   "code": "ALCD",
+   "name": "Art, Luxury and Collectible Assets",
+   "cluster": "specialist",
+   "strapline": "Fine Art | Collectibles | Luxury Assets",
+   "description": "ALCD serves collectors, estates and institutions. The division brokers fine art, sculpture, antiquities, jewellery, precious stones and other collectible assets, with attention to provenance, authentication and lawful export.",
+   "focus_areas": [
+    "Fine art, sculpture and contemporary African art transactions",
+    "Provenance research, authentication and condition assessment",
+    "Jewellery, precious stone and precious metal brokerage",
+    "Collection valuation, insurance and estate advisory",
+    "Auction representation and private treaty sales",
+    "Export permit and cultural property compliance support"
+   ]
+  },
+  {
+   "code": "SEBD",
+   "name": "Sports and Entertainment",
+   "cluster": "specialist",
+   "strapline": "Athlete Representation | Rights | Entertainment Deals",
+   "description": "SEBD represents athletes, artistes and rights holders in commercial negotiations. The division brokers transfers, contracts, image rights, sponsorship and touring arrangements, and advises young talent on the commercial realities behind an offer.",
+   "focus_areas": [
+    "Athlete transfer, contract and representation brokerage",
+    "Artiste booking, touring and performance contracting",
+    "Image rights, endorsement and sponsorship negotiation",
+    "Broadcast and event rights placement",
+    "Club, academy and franchise investment matching",
+    "Career, welfare and commercial advisory for young talent"
+   ]
+  },
+  {
+   "code": "DIRD",
+   "name": "Diaspora Investment and Remittance",
+   "cluster": "specialist",
+   "strapline": "Diaspora Capital | Trusted Representation | Homeland Investment",
+   "description": "DIRD exists because distance breeds risk. Ghanaians abroad routinely lose money on projects and purchases at home for want of a trustworthy representative on the ground.",
+   "focus_areas": [
+    "Diaspora property acquisition, construction supervision and custody",
+    "Business and franchise investment matching for returnees",
+    "Verified project sourcing and independent due diligence",
+    "Local representation, agency and progress reporting",
+    "Remittance linked investment and savings product introduction",
+    "Return and resettlement transaction support"
+   ]
+  }
+ ],
+ "advisers": [
+  {
+   "kind": "adviser",
+   "order": 1,
+   "name": "Prof. Ernest Ofori Asamoah",
+   "qualifications": "PhD, MSc, MA, MBA, BSc, MCIM-UK, CMC",
+   "portfolio": "Financial and Investment Brokerage",
+   "profile": "Senior Associate, KPMG Global Consulting, and Adjunct Professor, University of Johannesburg. Over fifteen years in research and consulting across finance and investment. He oversees capital raising, investor placement and deal structuring, and sits on the board as a director.",
+   "photo": "people/prof-ernest-ofori-asamoah.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 2,
+   "name": "Prof. Douglas Boateng",
+   "qualifications": "PhD, MSc, BSc, FCILT, FCIPS, FIoD",
+   "portfolio": "Supply Chain, Commodities and Industrialisation",
+   "profile": "Industrialist and supply chain governance specialist with extensive board level experience across mining, manufacturing and public institutions. He advises on commodity, freight, logistics and value addition mandates, and on the industrial strategy questions that sit behind large offtake arrangements.",
+   "photo": "people/prof-douglas-boateng.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 3,
+   "name": "Rev. (Prof.) Joseph Ignatius Teye Buertey",
+   "qualifications": "PhD, MSc, BSc, MGhIE",
+   "portfolio": "Engineering, Cost Verification and Technical Assurance",
+   "profile": "Professor of construction and civil engineering. He is responsible for technical condition assessment, cost verification and engineering assurance across infrastructure, plant and property mandates, and signs off the engineering opinions the firm presents to clients.",
+   "photo": "people/rev-prof-joseph-ignatius-teye-buertey.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 4,
+   "name": "Prof. Eric Oduro-Ofori",
+   "qualifications": "PhD, MSc, MA, BSc, MGIP",
+   "portfolio": "Public Sector and Development Transactions",
+   "profile": "Associate Professor in the Department of Planning at KNUST and a local government, planning and monitoring and evaluation consultant. He advises on assembly mandates, land use questions and public private transaction structuring, and manages the firm's relationships with district and municipal authorities.",
+   "photo": "people/prof-eric-oduro-ofori.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 5,
+   "name": "Prof. Richard Ohene Asiedu",
+   "qualifications": "PhD, MSc, BSc",
+   "portfolio": "Plant, Equipment and Infrastructure Assets",
+   "profile": "Professor of construction management with a research record in project cost performance and delivery risk. He leads equipment specification, inspection and valuation, and advises on the disposal of plant and infrastructure assets where condition and residual value are contested.",
+   "photo": "people/prof-richard-ohene-asiedu.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 6,
+   "name": "Prof. Francis Kwesi Bondinuba",
+   "qualifications": "PhD, MSc, BSc",
+   "portfolio": "Housing Delivery and Diaspora Investment",
+   "profile": "Housing finance and construction economics specialist. He advises on housing delivery mandates, affordable housing partnerships and the diaspora investment desk, where his work on housing finance informs how the firm structures and supervises builds for clients living abroad.",
+   "photo": "people/prof-francis-kwesi-bondinuba.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 7,
+   "name": "Prof. Emmanuel Adinyira",
+   "qualifications": "PhD, MSc, BSc",
+   "portfolio": "Carbon, Climate and Environmental Markets",
+   "profile": "Professor in the Department of Construction Technology and Management at KNUST, with a research focus on sustainability in the built environment. He assesses carbon projects for additionality, permanence and benefit sharing before the firm takes them to buyers, and advises on climate finance mandates.",
+   "photo": "people/prof-emmanuel-adinyira.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 8,
+   "name": "Dr. Frank Boateng",
+   "qualifications": "PhD, MPhil, MBA, MPM, BSc, ICIA, CFM, CMgr FCMI",
+   "portfolio": "Mining, Minerals and Natural Resources",
+   "profile": "Senior Lecturer at the University of Mines and Technology, Tarkwa, and a Chartered Management Consultant. He advises on concession interests, mining services mandates, licensing and host community obligations, and applies the firm's rule that no resource mandate proceeds without demonstrable lawful title and permitting.",
+   "photo": "people/dr-frank-boateng.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 9,
+   "name": "Dr. Kenneth Appiah Donkor-Hyiaman",
+   "qualifications": "PhD, MPhil, BSc, MRTPI, MCULS",
+   "portfolio": "Real Estate, Land and Housing Finance",
+   "profile": "Economic growth, land economy and planning consultant. He sets the valuation basis on property mandates and advises on land assembly, title risk and real estate investment structuring, including the customary land questions that decide whether a transaction completes or litigates.",
+   "photo": "people/dr-kenneth-appiah-donkor-hyiaman.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 10,
+   "name": "Dr. Ernest Kissi",
+   "qualifications": "PhD, MSc, BSc",
+   "portfolio": "Project Delivery and Public Private Partnerships",
+   "profile": "Construction project management and value management specialist in the Department of Construction Technology and Management at KNUST. He advises on project structuring, delivery risk and concession arrangements, and leads the firm's work on consortium formation for large works.",
+   "photo": "people/dr-ernest-kissi.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 11,
+   "name": "Dr. Michael Adesi",
+   "qualifications": "PhD, MPhil, BSc",
+   "portfolio": "Construction, Infrastructure and Project Brokerage",
+   "profile": "Lecturer in the Department of Construction Technology and Management at KNUST. He advises on contractor assessment, prequalification, consortium formation and the commercial structuring of construction mandates.",
+   "photo": "people/dr-michael-adesi.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 12,
+   "name": "Dr. Christian Sewordor Mensah",
+   "qualifications": "PhD, MPhil, BSc",
+   "portfolio": "Agribusiness, Produce and Rural Enterprise",
+   "profile": "Lecturer at Accra Metropolitan University and a Chartered Management Consultant. He advises on produce aggregation, offtake structuring, agricultural estate transactions and agribusiness investment matching, and on the quality and grading standards that determine whether an export contract holds.",
+   "photo": "people/dr-christian-sewordor-mensah.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 13,
+   "name": "Dr. Ralph Nyadu Addo",
+   "qualifications": "PhD, MA, BSc",
+   "portfolio": "Media, Publishing and Sponsorship",
+   "profile": "Senior Lecturer in the Department of Publishing Studies at KNUST and a mindset transformation trainer with over twenty five years in entrepreneurship and training. He advises on media buying, sponsorship, brand partnership and publishing rights mandates.",
+   "photo": "people/dr-ralph-nyadu-addo.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 14,
+   "name": "Dr. Maxwell Wahabu Manpaya",
+   "qualifications": "[qualifications to be confirmed]",
+   "portfolio": "Procurement and Auditing",
+   "profile": "Responsible for procurement process integrity, tender and contract review, and the internal audit standards applied to mandate files and client fee accounting. His function sits deliberately outside the desks that earn the fees.",
+   "photo": "people/dr-maxwell-wahabu-manpaya.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 15,
+   "name": "Rev. (Dr.) Nanayaa Tina Owusu-Prempeh",
+   "qualifications": "[qualifications to be confirmed]",
+   "portfolio": "Business Sales, Mergers and Succession",
+   "profile": "Responsible for business valuation, saleability assessment, confidential buyer screening and family succession mandates, where the commercial and the personal are rarely separable and both need handling.",
+   "photo": "people/rev-dr-nanayaa-tina-owusu-prempeh.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 16,
+   "name": "Rev. (Mrs.) Angela Carmen Appiah",
+   "qualifications": "[qualifications to be confirmed]",
+   "portfolio": "Hospitality, Education and Human Services",
+   "profile": "Responsible for mandates across the hospitality, training, placement and human services desks, and for the firm's client care and ethical conduct standards.",
+   "photo": "people/rev-mrs-angela-carmen-appiah.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 17,
+   "name": "Dr. Emmanuel Asare",
+   "qualifications": "[qualifications to be confirmed]",
+   "portfolio": "Corporate Finance and Financial Due Diligence",
+   "profile": "Responsible for accounts review, financial verification and the evidential basis of every valuation the firm presents to a client.",
+   "photo": "people/dr-emmanuel-asare.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 18,
+   "name": "Dr. Alexander Acheampong",
+   "qualifications": "[qualifications to be confirmed]",
+   "portfolio": "Energy, Power and Petroleum",
+   "profile": "Responsible for independent power project partnering, power purchase facilitation, fuel supply and bulk distribution mandates.",
+   "photo": "people/dr-alexander-acheampong.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 19,
+   "name": "Dr. Dramani Apour",
+   "qualifications": "[qualifications to be confirmed]",
+   "portfolio": "Economic Analysis and Market Intelligence",
+   "profile": "Responsible for market studies, price discovery, sector analysis and the research evidence that supports transaction pricing across all twenty five desks.",
+   "photo": "people/dr-dramani-apour.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 20,
+   "name": "Ms. Susana Asamoa, Esq.",
+   "qualifications": "[qualifications to be confirmed]",
+   "portfolio": "Legal, Title and Transaction Documentation",
+   "profile": "Responsible for title investigation, contract review, conveyancing oversight and the legal integrity of completion documentation. Her appointment brings in house the verification standard on which the firm's title commitments rest.",
+   "photo": "people/ms-susana-asamoa-esq.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 21,
+   "name": "Mr. Alexander Baah Amoakwa",
+   "qualifications": "[qualifications to be confirmed]",
+   "portfolio": "Insurance, Risk and Claims",
+   "profile": "Responsible for risk audit, cover design, insurance market placement and claims advocacy conducted on the client's behalf rather than the underwriter's.",
+   "photo": "people/mr-alexander-baah-amoakwa.png"
+  },
+  {
+   "kind": "adviser",
+   "order": 22,
+   "name": "Mr. Bright Agyeman Adu",
+   "qualifications": "[qualifications to be confirmed]",
+   "portfolio": "Freight, Logistics and Trade Facilitation",
+   "profile": "Responsible for freight capacity sourcing, carrier and rate negotiation, warehousing arrangements and the customs and documentary process behind import and export mandates.",
+   "photo": "people/mr-bright-agyeman-adu.png"
+  }
+ ],
+ "directors": [
+  {
+   "kind": "director",
+   "order": 1,
+   "name": "Prof. De-Graft Owusu-Manu",
+   "qualifications": "PhD, BSc, MGIOC, CMC, ChPA",
+   "portfolio": "Director and Chief Executive Officer",
+   "profile": "Professor of Construction Technology and Management at KNUST and a Chartered Management Consultant with over two decades in project finance, infrastructure economics, research and business advisory. He leads the firm's transaction strategy and carries personal responsibility for its capital markets, infrastructure and carbon practices.",
+   "photo": ""
+  },
+  {
+   "kind": "director",
+   "order": 2,
+   "name": "Prof. Ernest Ofori Asamoah",
+   "qualifications": "PhD, MSc, MA, MBA, BSc, MCIM-UK, CMC",
+   "portfolio": "Director and Lead Adviser, Financial and Investment Brokerage",
+   "profile": "Senior Associate at KPMG Global Consulting and Adjunct Professor at the University of Johannesburg, with more than fifteen years in research and consulting across finance and investment. He joined the board bringing the capital markets relationships on which the firm's fund raising mandates depend, and continues to lead the financial and investment desk.",
+   "photo": "people/prof-ernest-ofori-asamoah.png"
+  },
+  {
+   "kind": "director",
+   "order": 3,
+   "name": "Mrs. Matilda Owusu-Manu",
+   "qualifications": "MPhil, MBA, BA",
+   "portfolio": "Director and Company Secretary",
+   "profile": "Management and human development specialist responsible for corporate governance, statutory compliance and administration, and for the firm's human capital and services brokerage practices.",
+   "photo": ""
+  }
+ ]
+}

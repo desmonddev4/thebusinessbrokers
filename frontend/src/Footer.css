@@ -1,0 +1,237 @@
+
+
+/* ---------- Footer shell ---------- */
+.foot {
+  position: relative;
+  color: rgba(255, 255, 255, 0.78);
+  background: linear-gradient(180deg, var(--navy-700), var(--navy-900));
+  padding: 4rem 0 0;
+  overflow: hidden;
+}
+/* gold line across the top, same gradient as the navbar */
+.foot::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gold-grad);
+}
+/* soft blue glow in the corner for depth */
+.foot::after {
+  content: "";
+  position: absolute;
+  top: -120px; right: -120px;
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, rgba(10, 91, 211, 0.35), transparent 70%);
+  pointer-events: none;
+}
+
+/* ---------- Grid ---------- */
+.foot-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.3fr;
+  gap: 3rem;
+  padding-bottom: 3rem;
+}
+
+/* staggered reveal: columns start hidden, rise in when .in is added */
+.foot-col {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition-delay: calc(var(--i) * 120ms);
+}
+.foot.in .foot-col { opacity: 1; transform: translateY(0); }
+
+/* ---------- Brand ---------- */
+.foot-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+/* the logo has a white background, so give it a white rounded badge */
+.logo-badge {
+  display: grid;
+  place-items: center;
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.logo-badge img {
+  border-radius: 8px;
+}
+.foot-logo:hover .logo-badge { transform: rotate(-6deg) scale(1.08); }
+.foot-logo b {
+  background: var(--gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+}
+.foot-brand p {
+  margin-top: 1rem;
+  max-width: 32ch;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ---------- Headings ---------- */
+.foot h4 {
+  position: relative;
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.6rem;
+  color: #fff;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.foot h4::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 32px; height: 2px;
+  border-radius: 2px;
+  background: var(--gold-grad);
+}
+
+/* ---------- Lists ---------- */
+.foot ul { list-style: none; margin: 0; padding: 0; }
+
+.foot-links li + li { margin-top: 0.6rem; }
+.foot-links a {
+  position: relative;
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  transition: color 0.25s, transform 0.25s;
+}
+/* little gold dash that grows in before the link on hover */
+.foot-links a::before {
+  content: "";
+  display: inline-block;
+  width: 0; height: 2px;
+  margin-right: 0;
+  vertical-align: middle;
+  border-radius: 2px;
+  background: var(--gold-grad);
+  transition: width 0.3s ease, margin-right 0.3s ease;
+}
+.foot-links a:hover { color: var(--gold-300); transform: translateX(4px); }
+.foot-links a:hover::before { width: 14px; margin-right: 8px; }
+
+/* ---------- Contact ---------- */
+.foot-contact li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  line-height: 1.5;
+}
+.foot-contact li + li { margin-top: 1rem; }
+.foot-contact svg {
+  flex: none;
+  width: 34px; height: 34px;
+  padding: 8px;
+  border-radius: 10px;
+  fill: var(--gold-300);
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.3s, fill 0.3s, transform 0.3s;
+}
+.foot-contact li:hover svg {
+  background: var(--gold-grad);
+  fill: var(--navy-900);
+  transform: translateY(-2px);
+}
+.foot-contact a { color: inherit; text-decoration: none; transition: color 0.25s; }
+.foot-contact a:hover { color: var(--gold-300); }
+
+/* ---------- Bottom bar ---------- */
+.foot-bottom {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.4rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+.foot-bottom p { margin: 0; }
+.foot-bottom-links {
+  display: flex;
+  gap: 1.5rem;
+}
+.foot-bottom-links a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+.foot-bottom-links a:hover {
+  color: var(--gold-300);
+}
+
+/* back-to-top pill, same slide-in-gold trick as the navbar CTA */
+.to-top {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s, border-color 0.3s, transform 0.25s, box-shadow 0.25s;
+}
+.to-top::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gold-grad);
+  transform: translateY(101%);
+  transition: transform 0.35s ease;
+  z-index: -1;
+}
+.to-top svg { width: 16px; height: 16px; fill: currentColor; transition: transform 0.3s; }
+.to-top:hover {
+  color: var(--navy-900);
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(232, 163, 23, 0.35);
+}
+.to-top:hover::before { transform: translateY(0); }
+.to-top:hover svg { transform: translateY(-3px); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .foot { padding-top: 3rem; }
+  .foot-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem 2rem; }
+  .foot-brand { grid-column: 1 / -1; }
+}
+@media (max-width: 540px) {
+  .foot-grid { grid-template-columns: 1fr; }
+  .foot-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .foot-bottom-links {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .foot-col { opacity: 1; transform: none; }
+}
