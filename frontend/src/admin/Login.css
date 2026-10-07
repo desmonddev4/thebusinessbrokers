@@ -1,117 +1,291 @@
-.login-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+/* ==========================================================
+   Login page: navy + gold theme, fits the viewport (no scroll)
+   Uses the site's global tokens; fallbacks are included in
+   case this page loads without them.
+   ========================================================== */
+.lg-page {
+  --lg-navy-900: var(--navy-900, #031a4d);
+  --lg-navy-700: var(--navy-700, #0a2a6b);
+  --lg-blue-500: var(--blue-500, #0a5bd3);
+  --lg-gold-500: var(--gold-500, #e8a317);
+  --lg-gold-300: var(--gold-300, #ffe066);
+  --lg-gold-700: var(--gold-700, #b27a0c);
+  --lg-gold-grad: var(--gold-grad, linear-gradient(135deg, #ffe066, #e8a317));
+  --lg-danger: #d64545;
+
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #f3f6fc;
+}
+.lg-page *, .lg-page *::before, .lg-page *::after { box-sizing: border-box; }
+
+/* ---------- Brand panel ---------- */
+.lg-brand {
+  position: relative; overflow: hidden;
+  display: grid; place-items: center;
+  padding: 2rem; color: #fff;
+  background:
+    radial-gradient(520px 340px at 90% 0%, rgba(10, 91, 211, 0.5), transparent 70%),
+    radial-gradient(420px 300px at 0% 100%, rgba(232, 163, 23, 0.2), transparent 70%),
+    linear-gradient(160deg, var(--lg-navy-700), var(--lg-navy-900));
+}
+.lg-brand::before {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, #000, transparent 90%);
+  pointer-events: none;
+}
+.lg-brand::after {
+  content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 3px;
+  background: var(--lg-gold-grad);
+}
+.lg-brand-in {
+  position: relative; z-index: 1;
+  max-width: 380px; text-align: center;
+  animation: lgRise 0.8s ease both;
+}
+.lg-brand h2 {
+  margin: 1.5rem 0 0; font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+  line-height: 1.1; letter-spacing: -0.02em;
+}
+.lg-rule {
+  display: block; width: 48px; height: 3px; margin: 1rem auto;
+  border-radius: 3px; background: var(--lg-gold-grad);
+}
+.lg-brand p {
+  margin: 0; font-size: 1.05rem; line-height: 1.7;
+  color: rgba(255, 255, 255, 0.78);
 }
 
-.login-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  padding: 40px;
-  width: 100%;
-  max-width: 400px;
+/* ---------- Logo placement: white disc with a gold ring ---------- */
+.lg-logo-ring {
+  position: relative; display: grid; place-items: center;
+  width: 128px; height: 128px; margin: 0 auto; border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.12),
+    0 0 0 8px var(--lg-gold-500),
+    0 20px 50px rgba(0, 0, 0, 0.35);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.lg-logo-ring:hover {
+  transform: scale(1.05) rotate(-2deg);
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.18),
+    0 0 0 8px var(--lg-gold-300),
+    0 24px 60px rgba(232, 163, 23, 0.35);
+}
+.lg-logo {
+  display: block; width: 100%; height: 100%;
+  padding: 10px; border-radius: 50%; object-fit: contain;
+}
+.lg-logo-ring-sm {
+  display: none;            /* shown only when the brand panel is hidden */
+  width: 68px; height: 68px; margin-bottom: 0.9rem;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--lg-gold-500), 0 8px 20px rgba(3, 26, 77, 0.25);
+}
+.lg-logo-ring-sm .lg-logo { padding: 6px; }
+
+/* ---------- Form side ---------- */
+.lg-side {
+  display: grid; place-items: center;
+  min-height: 0; overflow-y: auto;   /* safety net only; layout is sized to fit */
+  padding: clamp(0.75rem, 3vh, 2rem) 1.25rem;
+}
+.lg-card {
+  width: 100%; max-width: 420px;
+  padding: clamp(1.25rem, 4vh, 2.5rem) clamp(1.25rem, 4vw, 2.25rem);
+  border-radius: 24px; background: #fff;
+  border-top: 3px solid var(--lg-gold-500);
+  box-shadow: 0 24px 60px rgba(3, 26, 77, 0.16);
+  animation: lgRise 0.7s 0.1s ease both;
 }
 
-.login-header {
-  text-align: center;
-  margin-bottom: 30px;
+.lg-header { text-align: center; margin-bottom: clamp(0.9rem, 3vh, 1.75rem); }
+.lg-header h1 {
+  margin: 0 0 0.3rem; color: var(--lg-navy-900);
+  font-size: clamp(1.5rem, 3vh + 0.6rem, 1.9rem); line-height: 1.15;
+}
+.lg-header p { margin: 0; color: #5a6a90; font-size: 0.95rem; }
+
+/* ---------- Form ---------- */
+.lg-form { display: grid; gap: clamp(0.75rem, 2.2vh, 1.15rem); }
+
+.lg-field { display: grid; gap: 0.4rem; }
+.lg-field label {
+  font-size: 0.8rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--lg-navy-900);
 }
 
-.login-logo {
-  width: 64px;
-  height: 64px;
-  margin-bottom: 16px;
-  border-radius: 8px;
+.lg-input {
+  position: relative; display: flex; align-items: center;
+  border-radius: 14px; background: #f3f6fc;
+  border: 2px solid transparent;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.lg-input:hover { border-color: rgba(3, 26, 77, 0.18); }
+.lg-input:focus-within {
+  background: #fff; border-color: var(--lg-gold-500);
+  box-shadow: 0 0 0 4px rgba(255, 224, 102, 0.45);
+}
+.lg-lead {
+  flex: none; display: grid; place-items: center;
+  width: 44px; color: var(--lg-navy-700); opacity: 0.55;
+  transition: opacity 0.25s, color 0.25s;
+}
+.lg-lead svg { width: 20px; height: 20px; fill: currentColor; }
+.lg-input:focus-within .lg-lead { opacity: 1; color: var(--lg-gold-700); }
+
+.lg-input input {
+  flex: 1; min-width: 0; height: 48px; padding: 0 0.5rem 0 0;
+  border: 0; outline: 0; background: transparent;
+  font: inherit; font-size: 1rem; color: var(--lg-navy-900);
+}
+.lg-input input::placeholder { color: rgba(3, 26, 77, 0.45); }
+/* hide the browser's own reveal icon so only ours shows */
+.lg-input input::-ms-reveal { display: none; }
+
+.lg-eye {
+  flex: none; display: grid; place-items: center;
+  width: 38px; height: 38px; margin-right: 5px;
+  border: 0; border-radius: 10px; cursor: pointer;
+  color: var(--lg-navy-700); background: transparent;
+  transition: background 0.25s, color 0.25s, transform 0.25s;
+}
+.lg-eye svg { width: 22px; height: 22px; fill: currentColor; }
+.lg-eye:hover { background: rgba(3, 26, 77, 0.08); color: var(--lg-navy-900); transform: scale(1.08); }
+.lg-eye:active { transform: scale(0.94); }
+.lg-eye:focus-visible { outline: 2px solid var(--lg-gold-500); outline-offset: 1px; }
+.lg-eye[aria-pressed="true"] { color: var(--lg-gold-700); }
+
+/* validation states */
+.lg-field.has-error .lg-input {
+  background: #fff6f6; border-color: var(--lg-danger);
+}
+.lg-field.has-error .lg-input:focus-within {
+  box-shadow: 0 0 0 4px rgba(214, 69, 69, 0.18);
+}
+.lg-field.has-error .lg-lead { color: var(--lg-danger); opacity: 1; }
+.lg-err, .lg-hint {
+  margin: 0; font-size: 0.82rem; line-height: 1.4;
+  animation: lgDrop 0.25s ease both;
+}
+.lg-err { color: var(--lg-danger); font-weight: 500; }
+.lg-hint { color: var(--lg-gold-700); font-weight: 600; }
+
+/* server error banner */
+.lg-alert {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  padding: 0.75rem 0.9rem; border-radius: 12px;
+  font-size: 0.9rem; line-height: 1.45; color: #9b2c2c;
+  background: #fff1f1; border: 1px solid #f5c2c2;
+  border-left: 4px solid var(--lg-danger);
+  animation: lgShake 0.4s ease both;
+}
+.lg-alert svg { flex: none; width: 20px; height: 20px; margin-top: 1px; fill: var(--lg-danger); }
+
+/* ---------- Primary button ---------- */
+.lg-btn {
+  position: relative; overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+  width: 100%; height: 50px; margin-top: 0.25rem;
+  border: 0; border-radius: 999px; cursor: pointer;
+  font: inherit; font-size: 1rem; font-weight: 700; letter-spacing: 0.02em;
+  color: var(--lg-navy-900);
+  background: var(--lg-gold-grad); background-size: 200% 100%;
+  box-shadow: 0 6px 18px rgba(232, 163, 23, 0.35);
+  transition: transform 0.25s, box-shadow 0.25s, background-position 0.5s;
+}
+/* light sweep across the button on hover */
+.lg-btn::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: skewX(-20deg); transition: left 0.6s ease;
+  pointer-events: none;
+}
+.lg-btn:hover:not(:disabled) {
+  transform: translateY(-2px); background-position: 100% 0;
+  box-shadow: 0 12px 28px rgba(232, 163, 23, 0.5);
+}
+.lg-btn:hover:not(:disabled)::after { left: 120%; }
+.lg-btn:active:not(:disabled) { transform: translateY(0); box-shadow: 0 4px 12px rgba(232, 163, 23, 0.4); }
+.lg-btn:focus-visible { outline: 3px solid var(--lg-navy-900); outline-offset: 3px; }
+.lg-btn:disabled { opacity: 0.75; cursor: not-allowed; }
+
+.lg-spin {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 3px solid rgba(3, 26, 77, 0.25); border-top-color: var(--lg-navy-900);
+  animation: lgSpin 0.7s linear infinite;
 }
 
-.login-header h1 {
-  margin: 0 0 8px 0;
-  font-size: 28px;
-  color: #1a1a1a;
+/* ---------- Footer link ---------- */
+.lg-footer { margin-top: clamp(0.75rem, 2.4vh, 1.4rem); text-align: center; }
+.lg-footer a {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.5rem 1rem; border-radius: 999px;
+  font-size: 0.9rem; font-weight: 600; text-decoration: none;
+  color: var(--lg-navy-700); border: 1px solid rgba(3, 26, 77, 0.14);
+  transition: color 0.25s, background 0.25s, border-color 0.25s, transform 0.25s;
+}
+.lg-footer a svg { width: 18px; height: 18px; fill: currentColor; transition: transform 0.25s; }
+.lg-footer a:hover {
+  color: var(--lg-navy-900); background: rgba(232, 163, 23, 0.12);
+  border-color: var(--lg-gold-500); transform: translateY(-1px);
+}
+.lg-footer a:hover svg { transform: translateX(-4px); }
+.lg-footer a:focus-visible { outline: 2px solid var(--lg-gold-500); outline-offset: 2px; }
+
+/* ---------- Animations ---------- */
+@keyframes lgRise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes lgDrop {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes lgShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+@keyframes lgSpin { to { transform: rotate(360deg); } }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .lg-page { grid-template-columns: 1fr; }
+  .lg-brand { display: none; }
+  .lg-logo-ring-sm { display: grid; }
+  .lg-side {
+    background:
+      radial-gradient(420px 300px at 100% 0%, rgba(10, 91, 211, 0.35), transparent 70%),
+      linear-gradient(160deg, var(--lg-navy-700), var(--lg-navy-900));
+  }
 }
 
-.login-header p {
-  margin: 0;
-  color: #666;
-  font-size: 14px;
+/* short screens: tighten everything so nothing scrolls */
+@media (max-height: 700px) {
+  .lg-logo-ring-sm { width: 52px; height: 52px; margin-bottom: 0.5rem; }
+  .lg-header p { display: none; }
+  .lg-input input { height: 44px; }
+  .lg-btn { height: 46px; }
+  .lg-logo-ring { width: 104px; height: 104px; }
+}
+@media (max-height: 560px) {
+  .lg-logo-ring-sm { display: none; }
+  .lg-brand p { display: none; }
 }
 
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-group label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-}
-
-.form-group input {
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border-color 0.2s;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #667eea;
-}
-
-.login-error {
-  background: #fee;
-  color: #c33;
-  padding: 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  border: 1px solid #fcc;
-}
-
-.login-button {
-  background: #667eea;
-  color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.login-button:hover:not(:disabled) {
-  background: #5568d3;
-}
-
-.login-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.login-footer {
-  margin-top: 24px;
-  text-align: center;
-}
-
-.login-footer a {
-  color: #667eea;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.login-footer a:hover {
-  text-decoration: underline;
+@media (prefers-reduced-motion: reduce) {
+  .lg-brand-in, .lg-card, .lg-alert, .lg-err, .lg-hint { animation: none; }
+  .lg-spin { animation-duration: 1.6s; }
+  .lg-logo-ring, .lg-btn, .lg-footer a { transition: none; }
 }
