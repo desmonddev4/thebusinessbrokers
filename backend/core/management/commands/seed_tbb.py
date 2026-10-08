@@ -50,4 +50,4 @@ class Command(BaseCommand):
             }
         )
 
-        self.stdout.write(self.style.SUCCESS(f"Created {made['desks']} desks and {made['people']} people (existing records {'overwritten' if force else 'kept})."))
+        self.stdout.write(self.style.SUCCESS(f"Created {made['desks']} desks and {made['people']} people (existing records {'overwritten' if force else 'kept'})."))
