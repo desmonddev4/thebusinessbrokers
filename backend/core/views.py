@@ -7,10 +7,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import Cluster, Desk, Person, Enquiry, ActivityLog
+from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteContent, SiteSettings
 from .serializers import (
     ClusterSerializer, DeskSerializer, PersonSerializer, EnquirySerializer,
-    DeskAdminSerializer, PersonAdminSerializer, EnquiryAdminSerializer, ActivityLogSerializer
+    DeskAdminSerializer, PersonAdminSerializer, EnquiryAdminSerializer, ActivityLogSerializer, ClusterAdminSerializer,
+    SiteContentSerializer, SiteSettingsSerializer
 )
 
 User = get_user_model()
@@ -97,6 +98,53 @@ class UserProfileView(APIView):
         })
 
 # Admin CRUD Views
+class ClusterListAdmin(generics.ListCreateAPIView):
+    queryset = Cluster.objects.all()
+    serializer_class = ClusterAdminSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.CREATE,
+            content_type="cluster",
+            object_id=response.data.get('id'),
+            object_name=response.data.get('name'),
+            description=f"Created cluster: {response.data.get('name')}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+class ClusterDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Cluster.objects.all()
+    serializer_class = ClusterAdminSerializer
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        cluster = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.UPDATE,
+            content_type="cluster",
+            object_id=cluster.id,
+            object_name=cluster.name,
+            description=f"Updated cluster: {cluster.name}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+    def destroy(self, request, *args, **kwargs):
+        cluster = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.DELETE,
+            content_type="cluster",
+            object_id=cluster.id,
+            object_name=cluster.name,
+            description=f"Deleted cluster: {cluster.name}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return super().destroy(request, *args, **kwargs)
+
 class DeskListAdmin(generics.ListCreateAPIView):
     queryset = Desk.objects.select_related('cluster').all()
     serializer_class = DeskAdminSerializer
@@ -227,6 +275,76 @@ class ActivityLogListAdmin(generics.ListAPIView):
     serializer_class = ActivityLogSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = None
+
+class SiteContentListAdmin(generics.ListCreateAPIView):
+    queryset = SiteContent.objects.all()
+    serializer_class = SiteContentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.CREATE,
+            content_type=ActivityLog.ContentType.CONTENT,
+            object_id=response.data.get('id'),
+            object_name=f"{response.data.get('section')}.{response.data.get('key')}",
+            description=f"Created content: {response.data.get('section')}.{response.data.get('key')}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+class SiteContentDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SiteContent.objects.all()
+    serializer_class = SiteContentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        content = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.UPDATE,
+            content_type=ActivityLog.ContentType.CONTENT,
+            object_id=content.id,
+            object_name=f"{content.section}.{content.key}",
+            description=f"Updated content: {content.section}.{content.key}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+class SiteSettingsListAdmin(generics.ListCreateAPIView):
+    queryset = SiteSettings.objects.all()
+    serializer_class = SiteSettingsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.CREATE,
+            content_type=ActivityLog.ContentType.SETTING,
+            object_id=response.data.get('id'),
+            object_name=response.data.get('key'),
+            description=f"Created setting: {response.data.get('key')}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+class SiteSettingsDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SiteSettings.objects.all()
+    serializer_class = SiteSettingsSerializer
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        setting = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.UPDATE,
+            content_type=ActivityLog.ContentType.SETTING,
+            object_id=setting.id,
+            object_name=setting.key,
+            description=f"Updated setting: {setting.key}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
 
 def spa(request, path=""):
     """Serve the React app for its client-side routes. Unknown paths get the same shell with a real 404 status."""

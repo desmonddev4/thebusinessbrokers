@@ -12,6 +12,9 @@ import AdminDesks from "./admin/Desks.jsx";
 import AdminPeople from "./admin/People.jsx";
 import AdminEnquiries from "./admin/Enquiries.jsx";
 import ActivityReport from "./admin/ActivityReport.jsx";
+import AdminClusters from "./admin/Clusters.jsx";
+import AdminSiteContent from "./admin/SiteContent.jsx";
+import AdminSiteSettings from "./admin/SiteSettings.jsx";
 import Home from "./pages/Home.jsx"; import Desks from "./pages/Desks.jsx"; import About from "./pages/About.jsx";
 import How from "./pages/How.jsx"; import Network from "./pages/Network.jsx"; import Initiatives from "./pages/Initiatives.jsx"; import Contact from "./pages/Contact.jsx"; import Privacy from "./pages/Privacy.jsx"; import Terms from "./pages/Terms.jsx"; import NotFound from "./pages/NotFound.jsx";
 
@@ -39,10 +42,13 @@ export default function App() {
               </ProtectedRoute>
             }>
               <Route index element={<Dashboard/>}/>
+              <Route path="clusters" element={<AdminClusters/>}/>
               <Route path="desks" element={<AdminDesks/>}/>
               <Route path="people" element={<AdminPeople/>}/>
               <Route path="enquiries" element={<AdminEnquiries/>}/>
               <Route path="activity" element={<ActivityReport/>}/>
+              <Route path="content" element={<AdminSiteContent/>}/>
+              <Route path="settings" element={<AdminSiteSettings/>}/>
             </Route>
             <Route path="*" element={<NotFound/>}/>
           </Routes>

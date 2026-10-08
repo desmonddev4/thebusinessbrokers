@@ -56,6 +56,9 @@ class ActivityLog(models.Model):
         DESK = "desk"
         PERSON = "person"
         ENQUIRY = "enquiry"
+        CLUSTER = "cluster"
+        CONTENT = "content"
+        SETTING = "setting"
 
     timestamp = models.DateTimeField(auto_now_add=True)
     action = models.CharField(max_length=10, choices=ActionType.choices)
@@ -72,3 +75,56 @@ class ActivityLog(models.Model):
 
     def __str__(self):
         return f"{self.get_action_display()} {self.get_content_type_display()} - {self.object_name or self.object_id}"
+
+class SiteContent(models.Model):
+    """Store editable static content sections"""
+    section = models.CharField(max_length=100, unique=True)
+    key = models.CharField(max_length=100)
+    value = models.TextField(blank=True)
+    value_type = models.CharField(
+        max_length=20,
+        choices=[
+            ("text", "Text"),
+            ("html", "HTML"),
+            ("json", "JSON"),
+            ("number", "Number"),
+        ],
+        default="text"
+    )
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ["section", "key"]
+        ordering = ["section", "key"]
+        verbose_name = "site content"
+        verbose_name_plural = "site content"
+
+    def __str__(self):
+        return f"{self.section}.{self.key}"
+
+class SiteSettings(models.Model):
+    """Global site settings"""
+    key = models.CharField(max_length=100, unique=True)
+    value = models.TextField(blank=True)
+    value_type = models.CharField(
+        max_length=20,
+        choices=[
+            ("text", "Text"),
+            ("email", "Email"),
+            ("url", "URL"),
+            ("number", "Number"),
+            ("boolean", "Boolean"),
+            ("json", "JSON"),
+        ],
+        default="text"
+    )
+    description = models.TextField(blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["key"]
+        verbose_name = "site setting"
+        verbose_name_plural = "site settings"
+
+    def __str__(self):
+        return self.key

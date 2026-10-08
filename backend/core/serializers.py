@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.db.models import Max
-from .models import Cluster, Desk, Person, Enquiry, ActivityLog
+from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteContent, SiteSettings
 
 class DeskSerializer(serializers.ModelSerializer):
     cluster = serializers.SlugRelatedField(slug_field="slug", read_only=True)
@@ -12,6 +12,25 @@ class DeskSerializer(serializers.ModelSerializer):
 class ClusterSerializer(serializers.ModelSerializer):
     desk_count = serializers.IntegerField(source="desks.count", read_only=True)
     class Meta: model = Cluster; fields = ["id","slug","name","short_name","desk_count"]
+
+class ClusterAdminSerializer(serializers.ModelSerializer):
+    desk_count = serializers.IntegerField(source="desks.count", read_only=True)
+    class Meta:
+        model = Cluster
+        fields = ["id", "order", "name", "short_name", "slug", "desk_count"]
+        read_only_fields = ["desk_count"]
+
+    def create(self, validated_data):
+        from django.utils.text import slugify
+        if 'slug' not in validated_data or not validated_data['slug']:
+            validated_data['slug'] = slugify(validated_data['name'])[:50]
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        from django.utils.text import slugify
+        if 'name' in validated_data and validated_data['name'] != instance.name:
+            validated_data['slug'] = slugify(validated_data['name'])[:50]
+        return super().update(instance, validated_data)
 
 class PersonSerializer(serializers.ModelSerializer):
     photo = serializers.SerializerMethodField()
@@ -75,3 +94,13 @@ class ActivityLogSerializer(serializers.ModelSerializer):
         model = ActivityLog
         fields = ["id", "timestamp", "action", "action_display", "content_type", "content_type_display",
                   "object_id", "object_name", "description", "user"]
+
+class SiteContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteContent
+        fields = ["id", "section", "key", "value", "value_type", "updated_at"]
+
+class SiteSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteSettings
+        fields = ["id", "key", "value", "value_type", "description", "updated_at"]
