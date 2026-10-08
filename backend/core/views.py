@@ -69,6 +69,23 @@ class SiteInfo(APIView):
             "email":""
         })
 
+class SiteContentView(APIView):
+    """Public endpoint for frontend to fetch editable content"""
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        content = SiteContent.objects.all()
+        serializer = SiteContentSerializer(content, many=True)
+        # Return as a dictionary for easier access: {section.key: value}
+        result = {}
+        for item in serializer.data:
+            key = f"{item['section']}.{item['key']}"
+            result[key] = {
+                "value": item["value"],
+                "type": item["value_type"]
+            }
+        return Response(result)
+
 
 KNOWN_ROUTES = {"", "about", "what-we-broker", "how-we-work", "network", "initiatives", "contact"}
 

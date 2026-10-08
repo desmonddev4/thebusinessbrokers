@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { get } from "../api.js";
+import { get, getContent } from "../api.js";
 import S from "../data/static.json";
 import { vision, mission, values } from "../content.js";
 import { PersonCard } from "./Network.jsx";
@@ -11,6 +11,11 @@ export default function About() {
   const [dirs, setDirs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [content, setContent] = useState({
+    vision: vision,
+    mission: mission,
+    values: values,
+  });
   const { addToast } = useToast();
 
   const fetchDirectors = () => {
@@ -27,8 +32,26 @@ export default function About() {
       .finally(() => setLoading(false));
   };
 
+  const fetchContent = async () => {
+    try {
+      const [visionData, missionData, valuesData] = await Promise.all([
+        getContent("about.vision", vision),
+        getContent("about.mission", mission),
+        getContent("about.values", values),
+      ]);
+      setContent({
+        vision: visionData,
+        mission: missionData,
+        values: valuesData,
+      });
+    } catch (err) {
+      console.error("Failed to load content:", err);
+    }
+  };
+
   useEffect(() => {
     fetchDirectors();
+    fetchContent();
   }, []);
 
   return (
@@ -56,11 +79,11 @@ export default function About() {
           <div className="a-vm">
             <div className="a-vm-card">
               <span className="a-vm-label">Our vision</span>
-              <p>{vision}</p>
+              <p>{content.vision}</p>
             </div>
             <div className="a-vm-card">
               <span className="a-vm-label">Our mission</span>
-              <p>{mission}</p>
+              <p>{content.mission}</p>
             </div>
           </div>
         </Reveal>
@@ -79,7 +102,7 @@ export default function About() {
           </Reveal>
           <Reveal delay={100}>
             <div className="a-values">
-              {values.map(([t, d], i) => (
+              {content.values.map(([t, d], i) => (
                 <article className="a-value" key={t}>
                   <span className="a-value-num">0{i + 1}</span>
                   <h3>{t}</h3>

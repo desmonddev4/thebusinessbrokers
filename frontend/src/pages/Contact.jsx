@@ -19,6 +19,10 @@ export default function Contact() {
   const [f, setF] = useState({ name: "", contact: "", desk: "", message: "", website: "" });
   const [state, setState] = useState("idle");
   const [errs, setErrs] = useState({});
+  const [siteInfo, setSiteInfo] = useState({
+    address: "Near Liberation Christian Centre, Bomso, Kumasi, Ashanti Region, Ghana",
+    phones: ["+233 (0) 243 555 882", "+233 (0) 243 257 214"],
+  });
   const { addToast } = useToast();
 
   useEffect(() => {
@@ -27,6 +31,13 @@ export default function Contact() {
       .catch(err => {
         console.error("Failed to load desks:", err);
         addToast(err.message || "Could not load desks", "error");
+      });
+
+    get("/site/")
+      .then(data => setSiteInfo(data))
+      .catch(err => {
+        console.error("Failed to load site info:", err);
+        // Keep default values on error
       });
   }, []);
 
@@ -84,10 +95,9 @@ export default function Contact() {
                   <span className="c-detail-ico"><Icon d={PIN} /></span>
                   <address>
                     <b>Kumasi office</b>
-                    Near Liberation Christian Centre<br />
-                    Bomso, Kumasi<br />
-                    Ashanti Region, Ghana<br />
-                    P. O. Box UP 629, KNUST, Kumasi
+                    <span style={{ whiteSpace: "pre-line" }}>
+                      {siteInfo.address || "Near Liberation Christian Centre\nBomso, Kumasi\nAshanti Region, Ghana"}
+                    </span>
                   </address>
                 </div>
               </Reveal>
@@ -96,8 +106,18 @@ export default function Contact() {
                   <span className="c-detail-ico"><Icon d={PHONE} /></span>
                   <p>
                     <b>Call us</b>
-                    <a href="tel:+233243555882">+233 (0) 243 555 882</a>
-                    <a href="tel:+233243257214">+233 (0) 243 257 214</a>
+                    {siteInfo.phones && siteInfo.phones.length > 0 ? (
+                      siteInfo.phones.map((phone, i) => (
+                        <a key={i} href={`tel:${phone.replace(/[^+\d]/g, '')}`}>
+                          {phone}
+                        </a>
+                      ))
+                    ) : (
+                      <>
+                        <a href="tel:+233243555882">+233 (0) 243 555 882</a>
+                        <a href="tel:+233243257214">+233 (0) 243 257 214</a>
+                      </>
+                    )}
                   </p>
                 </div>
               </Reveal>

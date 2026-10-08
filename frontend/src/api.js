@@ -80,3 +80,25 @@ export const del = async (p) => {
   if (!r.ok) throw { status: r.status, message: getErrorMessage(r.status) };
   return true;
 };
+
+// Helper to fetch site content with fallback to static files
+export const getContent = async (key, fallback = null) => {
+  try {
+    const data = await get("/content/");
+    const content = data[key];
+    if (content) {
+      // Parse JSON if needed
+      if (content.type === "json") {
+        try {
+          return JSON.parse(content.value);
+        } catch {
+          return content.value;
+        }
+      }
+      return content.value;
+    }
+  } catch (err) {
+    console.warn(`Failed to fetch content for ${key}:`, err);
+  }
+  return fallback;
+};
