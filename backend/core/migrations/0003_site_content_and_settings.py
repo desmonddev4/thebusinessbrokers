@@ -10,16 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='activitylog',
-            name='content_type',
-            field=models.CharField(choices=[('desk', 'Desk'), ('person', 'Person'), ('enquiry', 'Enquiry'), ('cluster', 'Cluster'), ('content', 'Content'), ('setting', 'Setting')], max_length=10),
-        ),
-        migrations.AlterField(
-            model_name='activitylog',
-            name='content_type',
-            field=models.CharField(choices=[('desk', 'Desk'), ('person', 'Person'), ('enquiry', 'Enquiry'), ('cluster', 'Cluster'), ('content', 'Content'), ('setting', 'Setting')], max_length=10),
-        ),
         migrations.CreateModel(
             name='SiteContent',
             fields=[

@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('timestamp', models.DateTimeField(auto_now_add=True)),
                 ('action', models.CharField(choices=[('create', 'Create'), ('update', 'Update'), ('delete', 'Delete'), ('view', 'View')], max_length=10)),
-                ('content_type', models.CharField(choices=[('desk', 'Desk'), ('person', 'Person'), ('enquiry', 'Enquiry')], max_length=10)),
+                ('content_type', models.CharField(choices=[('desk', 'Desk'), ('person', 'Person'), ('enquiry', 'Enquiry'), ('cluster', 'Cluster'), ('content', 'Content'), ('setting', 'Setting'), ('siteinfo', 'SiteInfo'), ('media', 'Media')], max_length=10)),
                 ('object_id', models.PositiveIntegerField(blank=True, null=True)),
                 ('object_name', models.CharField(blank=True, max_length=200)),
                 ('description', models.TextField(blank=True)),
