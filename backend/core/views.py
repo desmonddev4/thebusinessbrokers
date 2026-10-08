@@ -102,6 +102,16 @@ class DeskListAdmin(generics.ListCreateAPIView):
     serializer_class = DeskAdminSerializer
     permission_classes = [IsAuthenticated]
 
+    def create(self, request, *args, **kwargs):
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.warning(f"Desk create request data: {request.data}")
+        try:
+            return super().create(request, *args, **kwargs)
+        except Exception as e:
+            logger.error(f"Desk create error: {str(e)}")
+            raise
+
 class DeskDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
     queryset = Desk.objects.all()
     serializer_class = DeskAdminSerializer

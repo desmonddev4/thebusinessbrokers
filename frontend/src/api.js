@@ -39,7 +39,14 @@ export const post = async (p, body) => {
   } catch {
     d = {};
   }
-  if (!r.ok) throw { status: r.status, data: d, message: getErrorMessage(r.status, !Object.keys(d).length) };
+  if (!r.ok) {
+    // Try to get a more specific error message from the response
+    let message = d.detail || d.error || d.message || getErrorMessage(r.status, !Object.keys(d).length);
+    if (typeof d === 'object' && Object.keys(d).length > 0) {
+      message = `${message}: ${JSON.stringify(d)}`;
+    }
+    throw { status: r.status, data: d, message };
+  }
   return d;
 };
 
@@ -55,7 +62,13 @@ export const put = async (p, body) => {
   } catch {
     d = {};
   }
-  if (!r.ok) throw { status: r.status, data: d, message: getErrorMessage(r.status, !Object.keys(d).length) };
+  if (!r.ok) {
+    let message = d.detail || d.error || d.message || getErrorMessage(r.status, !Object.keys(d).length);
+    if (typeof d === 'object' && Object.keys(d).length > 0) {
+      message = `${message}: ${JSON.stringify(d)}`;
+    }
+    throw { status: r.status, data: d, message };
+  }
   return d;
 };
 
