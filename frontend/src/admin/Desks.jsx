@@ -65,7 +65,7 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
     const newErrors = {};
     if (!formData.code.trim()) newErrors.code = "Code is required";
     if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.cluster) newErrors.cluster = "Cluster is required";
+    if (!formData.cluster || typeof formData.cluster !== 'number') newErrors.cluster = "Cluster is required";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -80,7 +80,9 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
 
   const handleChange = e => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    // Convert cluster to number since it should be an ID
+    const processedValue = name === 'cluster' ? (value ? parseInt(value, 10) : '') : value;
+    setFormData(prev => ({ ...prev, [name]: processedValue }));
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: "" }));
   };
 
