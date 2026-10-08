@@ -23,4 +23,6 @@ urlpatterns = [
     path("admin/content/<int:pk>/", v.SiteContentDetailAdmin.as_view()),
     path("admin/settings/", v.SiteSettingsListAdmin.as_view()),
     path("admin/settings/<int:pk>/", v.SiteSettingsDetailAdmin.as_view()),
+    path("admin/siteinfo/", v.SiteInfoListAdmin.as_view()),
+    path("admin/siteinfo/<int:pk>/", v.SiteInfoDetailAdmin.as_view()),
 ]

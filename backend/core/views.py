@@ -7,11 +7,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteContent, SiteSettings
+from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteContent, SiteSettings, SiteInfo
 from .serializers import (
     ClusterSerializer, DeskSerializer, PersonSerializer, EnquirySerializer,
     DeskAdminSerializer, PersonAdminSerializer, EnquiryAdminSerializer, ActivityLogSerializer, ClusterAdminSerializer,
-    SiteContentSerializer, SiteSettingsSerializer
+    SiteContentSerializer, SiteSettingsSerializer, SiteInfoSerializer
 )
 
 User = get_user_model()
@@ -46,10 +46,28 @@ class EnquiryCreate(generics.CreateAPIView):
 class SiteInfo(APIView):
     """Registered particulars. Email is blank until the firm supplies one."""
     def get(self, request):
-        return Response({"name":"Top Business Brokers Consult Limited","registration":"CS054812019",
-            "incorporated":"19 March 2007","company_type":"Private limited company",
-            "address":"Near Liberation Christian Centre, Bomso, Kumasi, Ashanti Region, Ghana","post":"P. O. Box UP 629, KNUST, Kumasi",
-            "phones":["+233 (0) 243 555 882","+233 (0) 243 257 214"],"tin":"C0022801235","auditors":"Bridgewater Consulting, Kumasi","email":""})
+        # Try to get from database, fall back to defaults if none exists
+        try:
+            info = SiteInfo.objects.first()
+            if info:
+                serializer = SiteInfoSerializer(info)
+                return Response(serializer.data)
+        except Exception:
+            pass
+
+        # Fallback to hardcoded defaults
+        return Response({
+            "name":"Top Business Brokers Consult Limited",
+            "registration":"CS054812019",
+            "incorporated":"19 March 2007",
+            "company_type":"Private limited company",
+            "address":"Near Liberation Christian Centre, Bomso, Kumasi, Ashanti Region, Ghana",
+            "post":"P. O. Box UP 629, KNUST, Kumasi",
+            "phones":["+233 (0) 243 555 882","+233 (0) 243 257 214"],
+            "tin":"C0022801235",
+            "auditors":"Bridgewater Consulting, Kumasi",
+            "email":""
+        })
 
 
 KNOWN_ROUTES = {"", "about", "what-we-broker", "how-we-work", "network", "initiatives", "contact"}
@@ -345,6 +363,53 @@ class SiteSettingsDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
             user=request.user.username if request.user.is_authenticated else 'Anonymous'
         )
         return response
+
+class SiteInfoListAdmin(generics.ListCreateAPIView):
+    queryset = SiteInfo.objects.all()
+    serializer_class = SiteInfoSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.CREATE,
+            content_type="siteinfo",
+            object_id=response.data.get('id'),
+            object_name=response.data.get('name'),
+            description=f"Created site info: {response.data.get('name')}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+class SiteInfoDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SiteInfo.objects.all()
+    serializer_class = SiteInfoSerializer
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        info = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.UPDATE,
+            content_type="siteinfo",
+            object_id=info.id,
+            object_name=info.name,
+            description=f"Updated site info: {info.name}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+    def destroy(self, request, *args, **kwargs):
+        info = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.DELETE,
+            content_type="siteinfo",
+            object_id=info.id,
+            object_name=info.name,
+            description=f"Deleted site info: {info.name}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return super().destroy(request, *args, **kwargs)
 
 def spa(request, path=""):
     """Serve the React app for its client-side routes. Unknown paths get the same shell with a real 404 status."""

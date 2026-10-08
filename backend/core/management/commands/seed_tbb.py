@@ -3,7 +3,7 @@ from pathlib import Path
 from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.utils.text import slugify
-from core.models import Cluster, Desk, Person
+from core.models import Cluster, Desk, Person, SiteInfo
 
 FIX = Path(__file__).resolve().parents[2] / "fixtures"
 clean = lambda v: "" if "to be confirmed" in v.lower() else v
@@ -33,4 +33,21 @@ class Command(BaseCommand):
             if (created or force) and p["photo"] and (FIX / p["photo"]).exists():
                 with open(FIX / p["photo"], "rb") as fh: obj.photo.save(Path(p["photo"]).name, File(fh), save=True)
             made["people"] += created
-        self.stdout.write(self.style.SUCCESS(f"Created {made['desks']} desks and {made['people']} people (existing records {'overwritten' if force else 'kept'})."))
+
+        # Seed SiteInfo if it doesn't exist
+        SiteInfo.objects.get_or_create(
+            defaults={
+                "name": "Top Business Brokers Consult Limited",
+                "registration": "CS054812019",
+                "incorporated": "19 March 2007",
+                "company_type": "Private limited company",
+                "address": "Near Liberation Christian Centre, Bomso, Kumasi, Ashanti Region, Ghana",
+                "post": "P. O. Box UP 629, KNUST, Kumasi",
+                "phones": ["+233 (0) 243 555 882", "+233 (0) 243 257 214"],
+                "tin": "C0022801235",
+                "auditors": "Bridgewater Consulting, Kumasi",
+                "email": ""
+            }
+        )
+
+        self.stdout.write(self.style.SUCCESS(f"Created {made['desks']} desks and {made['people']} people (existing records {'overwritten' if force else 'kept})."))

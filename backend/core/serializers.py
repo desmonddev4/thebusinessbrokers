@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.db.models import Max
-from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteContent, SiteSettings
+from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteContent, SiteSettings, SiteInfo
 
 class DeskSerializer(serializers.ModelSerializer):
     cluster = serializers.SlugRelatedField(slug_field="slug", read_only=True)
@@ -104,3 +104,9 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteSettings
         fields = ["id", "key", "value", "value_type", "description", "updated_at"]
+
+class SiteInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteInfo
+        fields = ["id", "name", "registration", "incorporated", "company_type",
+                  "address", "post", "phones", "tin", "auditors", "email", "updated_at"]
