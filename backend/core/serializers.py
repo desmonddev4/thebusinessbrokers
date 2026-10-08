@@ -30,9 +30,10 @@ class EnquirySerializer(serializers.ModelSerializer):
 
 # Admin serializers for full CRUD
 class DeskAdminSerializer(serializers.ModelSerializer):
+    cluster_name = serializers.CharField(source="cluster.name", read_only=True)
     class Meta:
         model = Desk
-        fields = ["id", "code", "name", "slug", "strapline", "description", "focus_areas", "cluster", "order"]
+        fields = ["id", "code", "name", "slug", "strapline", "description", "focus_areas", "cluster", "cluster_name", "order"]
 
 class PersonAdminSerializer(serializers.ModelSerializer):
     class Meta:
