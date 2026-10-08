@@ -16,6 +16,8 @@ import AdminClusters from "./admin/Clusters.jsx";
 import AdminSiteContent from "./admin/SiteContent.jsx";
 import AdminSiteSettings from "./admin/SiteSettings.jsx";
 import AdminSiteInfo from "./admin/SiteInfo.jsx";
+import UserManagement from "./admin/UserManagement.jsx";
+import MediaManagement from "./admin/MediaManagement.jsx";
 import Home from "./pages/Home.jsx"; import Desks from "./pages/Desks.jsx"; import About from "./pages/About.jsx";
 import How from "./pages/How.jsx"; import Network from "./pages/Network.jsx"; import Initiatives from "./pages/Initiatives.jsx"; import Contact from "./pages/Contact.jsx"; import Privacy from "./pages/Privacy.jsx"; import Terms from "./pages/Terms.jsx"; import NotFound from "./pages/NotFound.jsx";
 
@@ -51,6 +53,8 @@ export default function App() {
               <Route path="content" element={<AdminSiteContent/>}/>
               <Route path="settings" element={<AdminSiteSettings/>}/>
               <Route path="siteinfo" element={<AdminSiteInfo/>}/>
+              <Route path="users" element={<UserManagement/>}/>
+              <Route path="media" element={<MediaManagement/>}/>
             </Route>
             <Route path="*" element={<NotFound/>}/>
           </Routes>

@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { get } from "../api.js";
 import { conditions, stages } from "../content.js";
 import Reveal from "./Reveal.jsx";
 import "./How.css";
@@ -6,6 +8,28 @@ import "./How.css";
 const pad = i => String(i + 1).padStart(2, "0");
 
 export default function How() {
+  const [content, setContent] = useState({ conditions, stages });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    get("/content/")
+      .then(data => {
+        setContent({
+          conditions: data["how.conditions"]?.value ? JSON.parse(data["how.conditions"].value) : conditions,
+          stages: data["how.stages"]?.value ? JSON.parse(data["how.stages"].value) : stages,
+        });
+      })
+      .catch(err => {
+        console.error("Failed to load content:", err);
+        // Fall back to static content
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Show loading state or fall back to static content
+  const displayConditions = loading ? conditions : content.conditions;
+  const displayStages = loading ? stages : content.stages;
+
   return (
     <main className="how">
       {/* ---------------- HERO + CONDITIONS ---------------- */}
@@ -30,7 +54,7 @@ export default function How() {
           </div>
 
           <div className="w-chain">
-            {conditions.map(([t, d], i) => (
+            {displayConditions.map(([t, d], i) => (
               <Reveal key={t} delay={i * 90}>
                 <article className="w-link">
                   <span className="w-link-tag">Link {pad(i)}</span>
@@ -55,7 +79,7 @@ export default function How() {
         </Reveal>
 
         <ol className="w-steps">
-          {stages.map(([t, d, r], i) => (
+          {displayStages.map(([t, d, r], i) => (
             <li key={t}>
               <Reveal delay={i * 80}>
                 <div className="w-step">

@@ -2,16 +2,21 @@ from django.conf import settings
 from django.http import FileResponse, Http404
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteContent, SiteSettings, SiteInfo
+from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteContent, SiteSettings
+# SiteInfo and MediaFile temporarily commented out until migrations run
+# from .models import SiteInfo, MediaFile
 from .serializers import (
     ClusterSerializer, DeskSerializer, PersonSerializer, EnquirySerializer,
     DeskAdminSerializer, PersonAdminSerializer, EnquiryAdminSerializer, ActivityLogSerializer, ClusterAdminSerializer,
-    SiteContentSerializer, SiteSettingsSerializer, SiteInfoSerializer
+    SiteContentSerializer, SiteSettingsSerializer
+# SiteInfoSerializer and MediaFileSerializer temporarily commented out until migrations run
+# , SiteInfoSerializer, MediaFileSerializer
 )
 
 User = get_user_model()
@@ -48,6 +53,8 @@ class SiteInfo(APIView):
     def get(self, request):
         # Try to get from database, fall back to defaults if none exists
         try:
+            from .models import SiteInfo
+            from .serializers import SiteInfoSerializer
             info = SiteInfo.objects.first()
             if info:
                 serializer = SiteInfoSerializer(info)
@@ -131,6 +138,129 @@ class UserProfileView(APIView):
             'username': request.user.username,
             'email': request.user.email,
         })
+
+class UserListAdmin(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        users = User.objects.filter(is_staff=True).values('id', 'username', 'email', 'is_staff', 'is_superuser', 'date_joined')
+        return Response(list(users))
+
+    def post(self, request):
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
+        is_superuser = request.data.get('is_superuser', False)
+
+        if not username or not password:
+            return Response({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(username=username).exists():
+            return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.create(
+            username=username,
+            email=email,
+            password=make_password(password),
+            is_staff=True,
+            is_superuser=is_superuser
+        )
+
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.CREATE,
+            content_type="user",
+            object_id=user.id,
+            object_name=user.username,
+            description=f"Created admin user: {user.username}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'is_staff': user.is_staff,
+            'is_superuser': user.is_superuser,
+        }, status=status.HTTP_201_CREATED)
+
+class UserDetailAdmin(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id, is_staff=True)
+            return Response({
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'is_staff': user.is_staff,
+                'is_superuser': user.is_superuser,
+                'date_joined': user.date_joined,
+            })
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id, is_staff=True)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Prevent users from deactivating themselves
+        if user.id == request.user.id and request.data.get('is_staff') == False:
+            return Response({'error': 'Cannot deactivate your own account'}, status=status.HTTP_400_BAD_REQUEST)
+
+        email = request.data.get('email')
+        password = request.data.get('password')
+        is_superuser = request.data.get('is_superuser', user.is_superuser)
+
+        if email:
+            user.email = email
+        if password:
+            user.password = make_password(password)
+        user.is_superuser = is_superuser
+        user.save()
+
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.UPDATE,
+            content_type="user",
+            object_id=user.id,
+            object_name=user.username,
+            description=f"Updated admin user: {user.username}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'is_staff': user.is_staff,
+            'is_superuser': user.is_superuser,
+        })
+
+    def delete(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id, is_staff=True)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Prevent users from deleting themselves
+        if user.id == request.user.id:
+            return Response({'error': 'Cannot delete your own account'}, status=status.HTTP_400_BAD_REQUEST)
+
+        username = user.username
+        user.delete()
+
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.DELETE,
+            content_type="user",
+            object_id=user_id,
+            object_name=username,
+            description=f"Deleted admin user: {username}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 # Admin CRUD Views
 class ClusterListAdmin(generics.ListCreateAPIView):
@@ -381,52 +511,53 @@ class SiteSettingsDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
         )
         return response
 
-class SiteInfoListAdmin(generics.ListCreateAPIView):
-    queryset = SiteInfo.objects.all()
-    serializer_class = SiteInfoSerializer
-    permission_classes = [IsAuthenticated]
-
-    def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
-        ActivityLog.objects.create(
-            action=ActivityLog.ActionType.CREATE,
-            content_type="siteinfo",
-            object_id=response.data.get('id'),
-            object_name=response.data.get('name'),
-            description=f"Created site info: {response.data.get('name')}",
-            user=request.user.username if request.user.is_authenticated else 'Anonymous'
-        )
-        return response
-
-class SiteInfoDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
-    queryset = SiteInfo.objects.all()
-    serializer_class = SiteInfoSerializer
-    permission_classes = [IsAuthenticated]
-
-    def update(self, request, *args, **kwargs):
-        response = super().update(request, *args, **kwargs)
-        info = self.get_object()
-        ActivityLog.objects.create(
-            action=ActivityLog.ActionType.UPDATE,
-            content_type="siteinfo",
-            object_id=info.id,
-            object_name=info.name,
-            description=f"Updated site info: {info.name}",
-            user=request.user.username if request.user.is_authenticated else 'Anonymous'
-        )
-        return response
-
-    def destroy(self, request, *args, **kwargs):
-        info = self.get_object()
-        ActivityLog.objects.create(
-            action=ActivityLog.ActionType.DELETE,
-            content_type="siteinfo",
-            object_id=info.id,
-            object_name=info.name,
-            description=f"Deleted site info: {info.name}",
-            user=request.user.username if request.user.is_authenticated else 'Anonymous'
-        )
-        return super().destroy(request, *args, **kwargs)
+# SiteInfo admin views temporarily commented out until migrations run
+# class SiteInfoListAdmin(generics.ListCreateAPIView):
+#     queryset = SiteInfo.objects.all()
+#     serializer_class = SiteInfoSerializer
+#     permission_classes = [IsAuthenticated]
+#
+#     def create(self, request, *args, **kwargs):
+#         response = super().create(request, *args, **kwargs)
+#         ActivityLog.objects.create(
+#             action=ActivityLog.ActionType.CREATE,
+#             content_type="siteinfo",
+#             object_id=response.data.get('id'),
+#             object_name=response.data.get('name'),
+#             description=f"Created site info: {response.data.get('name')}",
+#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
+#         )
+#         return response
+#
+# class SiteInfoDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = SiteInfo.objects.all()
+#     serializer_class = SiteInfoSerializer
+#     permission_classes = [IsAuthenticated]
+#
+#     def update(self, request, *args, **kwargs):
+#         response = super().update(request, *args, **kwargs)
+#         info = self.get_object()
+#         ActivityLog.objects.create(
+#             action=ActivityLog.ActionType.UPDATE,
+#             content_type="siteinfo",
+#             object_id=info.id,
+#             object_name=info.name,
+#             description=f"Updated site info: {info.name}",
+#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
+#         )
+#         return response
+#
+#     def destroy(self, request, *args, **kwargs):
+#         info = self.get_object()
+#         ActivityLog.objects.create(
+#             action=ActivityLog.ActionType.DELETE,
+#             content_type="siteinfo",
+#             object_id=info.id,
+#             object_name=info.name,
+#             description=f"Deleted site info: {info.name}",
+#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
+#         )
+#         return super().destroy(request, *args, **kwargs)
 
 def spa(request, path=""):
     """Serve the React app for its client-side routes. Unknown paths get the same shell with a real 404 status."""
@@ -434,3 +565,85 @@ def spa(request, path=""):
     if not index.exists():
         raise Http404("Frontend not built")
     return FileResponse(open(index, "rb"), content_type="text/html", status=200 if path.strip("/") in KNOWN_ROUTES else 404)
+
+# Media Management Views - temporarily commented out until migrations run
+# class MediaFileListAdmin(generics.ListCreateAPIView):
+#     queryset = MediaFile.objects.all()
+#     serializer_class = MediaFileSerializer
+#     permission_classes = [IsAuthenticated]
+#
+#     def create(self, request, *args, **kwargs):
+#         uploaded_file = request.FILES.get('file')
+#         if not uploaded_file:
+#             return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
+#
+#         # Get file info
+#         filename = uploaded_file.name
+#         file_size = uploaded_file.size
+#         file_type = uploaded_file.content_type or 'application/octet-stream'
+#
+#         # Categorize file type
+#         if file_type.startswith('image/'):
+#             file_type = 'image'
+#         elif file_type.startswith('video/'):
+#             file_type = 'video'
+#         elif file_type.startswith('audio/'):
+#             file_type = 'audio'
+#         elif file_type in ['application/pdf']:
+#             file_type = 'document'
+#         else:
+#             file_type = 'file'
+#
+#         media_file = MediaFile.objects.create(
+#             file=uploaded_file,
+#             filename=filename,
+#             file_type=file_type,
+#             file_size=file_size,
+#             uploaded_by=request.user.username if request.user.is_authenticated else 'Anonymous',
+#             alt_text=request.data.get('alt_text', ''),
+#             description=request.data.get('description', '')
+#         )
+#
+#         ActivityLog.objects.create(
+#             action=ActivityLog.ActionType.CREATE,
+#             content_type="media",
+#             object_id=media_file.id,
+#             object_name=filename,
+#             description=f"Uploaded media file: {filename}",
+#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
+#         )
+#
+#         serializer = self.get_serializer(media_file)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#
+# class MediaFileDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = MediaFile.objects.all()
+#     serializer_class = MediaFileSerializer
+#     permission_classes = [IsAuthenticated]
+#
+#     def update(self, request, *args, **kwargs):
+#         response = super().update(request, *args, **kwargs)
+#         media_file = self.get_object()
+#         ActivityLog.objects.create(
+#             action=ActivityLog.ActionType.UPDATE,
+#             content_type="media",
+#             object_id=media_file.id,
+#             object_name=media_file.filename,
+#             description=f"Updated media file: {media_file.filename}",
+#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
+#         )
+#         return response
+#
+#     def destroy(self, request, *args, **kwargs):
+#         media_file = self.get_object()
+#         filename = media_file.filename
+#         media_file.file.delete(save=False)  # Delete the actual file
+#         ActivityLog.objects.create(
+#             action=ActivityLog.ActionType.DELETE,
+#             content_type="media",
+#             object_id=media_file.id,
+#             object_name=filename,
+#             description=f"Deleted media file: {filename}",
+#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
+#         )
+#         return super().destroy(request, *args, **kwargs)

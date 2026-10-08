@@ -43,6 +43,12 @@ export default function Network() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(false);
+  const [content, setContent] = useState({
+    network_lede: S.network_lede,
+    associates_lede: S.associates_lede,
+    associates: S.associates,
+    associates_cta: S.associates_cta,
+  });
   const { addToast } = useToast();
 
   const fetchAdvisers = () => {
@@ -61,6 +67,19 @@ export default function Network() {
 
   useEffect(() => {
     fetchAdvisers();
+    get("/content/")
+      .then(data => {
+        setContent({
+          network_lede: data["network.lede"]?.value || S.network_lede,
+          associates_lede: data["network.associates_lede"]?.value || S.associates_lede,
+          associates: data["network.associates"]?.value ? JSON.parse(data["network.associates"].value) : S.associates,
+          associates_cta: data["network.associates_cta"]?.value || S.associates_cta,
+        });
+      })
+      .catch(err => {
+        console.error("Failed to load content:", err);
+        // Fall back to static content
+      });
   }, []);
 
   return (
@@ -76,7 +95,7 @@ export default function Network() {
               <h1>Our professional network</h1>
             </Reveal>
             <Reveal delay={200}>
-              <p className="n-lede">{S.network_lede}</p>
+              <p className="n-lede">{content.network_lede}</p>
             </Reveal>
           </div>
         </div>
@@ -114,12 +133,12 @@ export default function Network() {
           <Reveal className="n-assoc-intro">
             <span className="eyebrow">Specialists</span>
             <h2 id="associates">Associates we call on</h2>
-            <p className="n-lede">{S.associates_lede}</p>
+            <p className="n-lede">{content.associates_lede}</p>
           </Reveal>
 
           <Reveal delay={120}>
             <ul className="n-tags">
-              {S.associates.map(a => (
+              {content.associates.map(a => (
                 <li key={a}>{a}</li>
               ))}
             </ul>
@@ -132,7 +151,7 @@ export default function Network() {
         <Reveal className="h-cta">
           <div>
             <h2>Need a specialist for your deal?</h2>
-            <p>{S.associates_cta}</p>
+            <p>{content.associates_cta}</p>
           </div>
           <Link className="btn-gold" to="/contact">Get in touch</Link>
         </Reveal>

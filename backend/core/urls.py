@@ -4,6 +4,9 @@ urlpatterns = [
     # Public endpoints
     path("login/", v.LoginView.as_view()),
     path("profile/", v.UserProfileView.as_view()),
+    # Admin user management
+    path("admin/users/", v.UserListAdmin.as_view()),
+    path("admin/users/<int:user_id>/", v.UserDetailAdmin.as_view()),
     path("clusters/", v.ClusterList.as_view()),
     path("desks/", v.DeskList.as_view()),
     path("people/", v.PersonList.as_view()),
@@ -24,6 +27,10 @@ urlpatterns = [
     path("admin/content/<int:pk>/", v.SiteContentDetailAdmin.as_view()),
     path("admin/settings/", v.SiteSettingsListAdmin.as_view()),
     path("admin/settings/<int:pk>/", v.SiteSettingsDetailAdmin.as_view()),
-    path("admin/siteinfo/", v.SiteInfoListAdmin.as_view()),
-    path("admin/siteinfo/<int:pk>/", v.SiteInfoDetailAdmin.as_view()),
+    # SiteInfo admin routes temporarily commented out until migrations run
+    # path("admin/siteinfo/", v.SiteInfoListAdmin.as_view()),
+    # path("admin/siteinfo/<int:pk>/", v.SiteInfoDetailAdmin.as_view()),
+    # Media admin routes temporarily commented out until migrations run
+    # path("admin/media/", v.MediaFileListAdmin.as_view()),
+    # path("admin/media/<int:pk>/", v.MediaFileDetailAdmin.as_view()),
 ]

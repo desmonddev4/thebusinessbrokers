@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { get } from "../api.js";
 import S from "../data/static.json";
 import Reveal from "./Reveal.jsx";
 import "./Initiatives.css";
@@ -31,8 +33,46 @@ const Table = ({ head, rows }) => (
 );
 
 export default function Initiatives() {
-  const I = S.institute,
-    M = S.summit;
+  const [content, setContent] = useState({
+    initiatives_lede: S.initiatives_lede,
+    institute: S.institute,
+    summit: S.summit,
+  });
+
+  useEffect(() => {
+    get("/content/")
+      .then(data => {
+        setContent({
+          initiatives_lede: data["initiatives.lede"]?.value || S.initiatives_lede,
+          institute: {
+            name: data["initiatives.institute.name"]?.value || S.institute.name,
+            strap: data["initiatives.institute.strap"]?.value || S.institute.strap,
+            paras: data["initiatives.institute.paras"]?.value ? JSON.parse(data["initiatives.institute.paras"].value) : S.institute.paras,
+            offers: data["initiatives.institute.offers"]?.value ? JSON.parse(data["initiatives.institute.offers"].value) : S.institute.offers,
+            grades: data["initiatives.institute.grades"]?.value ? JSON.parse(data["initiatives.institute.grades"].value) : S.institute.grades,
+            faculties: data["initiatives.institute.faculties"]?.value ? JSON.parse(data["initiatives.institute.faculties"].value) : S.institute.faculties,
+            status: data["initiatives.institute.status"]?.value || S.institute.status,
+            faculties_intro: data["initiatives.institute.faculties_intro"]?.value || S.institute.faculties_intro,
+          },
+          summit: {
+            name: data["initiatives.summit.name"]?.value || S.summit.name,
+            strap: data["initiatives.summit.strap"]?.value || S.summit.strap,
+            intro: data["initiatives.summit.intro"]?.value || S.summit.intro,
+            body: data["initiatives.summit.body"]?.value || S.summit.body,
+            who: data["initiatives.summit.who"]?.value || S.summit.who,
+            themes: data["initiatives.summit.themes"]?.value ? JSON.parse(data["initiatives.summit.themes"].value) : S.summit.themes,
+            facts: data["initiatives.summit.facts"]?.value ? JSON.parse(data["initiatives.summit.facts"].value) : S.summit.facts,
+          },
+        });
+      })
+      .catch(err => {
+        console.error("Failed to load content:", err);
+        // Fall back to static content
+      });
+  }, []);
+
+  const I = content.institute;
+  const M = content.summit;
 
   return (
     <main className="initiatives">
@@ -47,7 +87,7 @@ export default function Initiatives() {
               <h1>Our initiatives</h1>
             </Reveal>
             <Reveal delay={200}>
-              <p className="i-lede">{S.initiatives_lede}</p>
+              <p className="i-lede">{content.initiatives_lede}</p>
             </Reveal>
             <Reveal delay={300}>
               <nav className="i-jump" aria-label="On this page">

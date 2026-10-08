@@ -375,3 +375,28 @@
   .admin-page .table-container, .admin-page .modal, .admin-page .modal-overlay,
   .admin-page .skel-row span { animation: none; }
 }
+
+/* ---------- Upload Zone ---------- */
+.admin-page .upload-zone {
+  display: grid; place-items: center; gap: 0.6rem;
+  padding: 2.5rem 1.5rem; border-radius: 16px;
+  border: 2px dashed var(--at-navy-200);
+  background: var(--at-navy-50);
+  transition: border-color 0.25s, background 0.25s;
+}
+.admin-page .upload-zone.drag-active {
+  border-color: var(--at-gold-500);
+  background: rgba(255, 224, 102, 0.1);
+}
+.admin-page .upload-zone svg { width: 48px; height: 48px; fill: var(--at-navy-700); opacity: 0.5; }
+.admin-page .upload-zone p { margin: 0; font-weight: 500; color: var(--at-navy-900); }
+.admin-page .upload-label {
+  display: grid; place-items: center; gap: 0.6rem;
+  padding: 1rem; border-radius: 12px; cursor: pointer;
+  transition: background 0.25s;
+}
+.admin-page .upload-label:hover { background: rgba(255, 255, 255, 0.6); }
+.admin-page .upload-size {
+  display: block; margin-top: 0.3rem;
+  font-size: 0.8rem; color: #5a6a90;
+}

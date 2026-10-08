@@ -27,11 +27,16 @@ export const get = (p) =>
     });
   });
 
-export const post = async (p, body) => {
+export const post = async (p, body, isFormData = false) => {
+  const headers = getHeaders();
+  if (isFormData) {
+    delete headers["Content-Type"]; // Let browser set multipart/form-data boundary
+  }
+
   const r = await fetch(`${B}${p}`, {
     method: "POST",
-    headers: getHeaders(),
-    body: JSON.stringify(body)
+    headers,
+    body: isFormData ? body : JSON.stringify(body)
   });
   let d;
   try {
