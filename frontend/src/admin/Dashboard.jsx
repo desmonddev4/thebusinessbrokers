@@ -164,7 +164,10 @@ export default function Dashboard() {
         </section>
 
         <section className="dashboard-card">
-          <h2>Recent Activity</h2>
+          <div className="dashboard-card-header">
+            <h2>Recent Activity</h2>
+            <Link to="/admin/activity" className="view-all-link">View All</Link>
+          </div>
           {activities.length === 0 ? (
             <div className="dashboard-empty">
               <span className="dashboard-empty-icon">

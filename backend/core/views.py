@@ -223,7 +223,7 @@ class EnquiryDetailAdmin(generics.RetrieveUpdateAPIView):
         return response
 
 class ActivityLogListAdmin(generics.ListAPIView):
-    queryset = ActivityLog.objects.all()[:20]
+    queryset = ActivityLog.objects.all()
     serializer_class = ActivityLogSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = None

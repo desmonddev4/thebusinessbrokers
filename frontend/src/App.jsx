@@ -11,6 +11,7 @@ import Dashboard from "./admin/Dashboard.jsx";
 import AdminDesks from "./admin/Desks.jsx";
 import AdminPeople from "./admin/People.jsx";
 import AdminEnquiries from "./admin/Enquiries.jsx";
+import ActivityReport from "./admin/ActivityReport.jsx";
 import Home from "./pages/Home.jsx"; import Desks from "./pages/Desks.jsx"; import About from "./pages/About.jsx";
 import How from "./pages/How.jsx"; import Network from "./pages/Network.jsx"; import Initiatives from "./pages/Initiatives.jsx"; import Contact from "./pages/Contact.jsx"; import Privacy from "./pages/Privacy.jsx"; import Terms from "./pages/Terms.jsx"; import NotFound from "./pages/NotFound.jsx";
 
@@ -41,6 +42,7 @@ export default function App() {
               <Route path="desks" element={<AdminDesks/>}/>
               <Route path="people" element={<AdminPeople/>}/>
               <Route path="enquiries" element={<AdminEnquiries/>}/>
+              <Route path="activity" element={<ActivityReport/>}/>
             </Route>
             <Route path="*" element={<NotFound/>}/>
           </Routes>
