@@ -133,6 +133,8 @@
 
 .dashboard-card-header h2::after {
   position: absolute;
+  left: 0;
+  bottom: 0;
 }
 
 .view-all-link {
