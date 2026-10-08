@@ -33,6 +33,8 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
   const [errors, setErrors] = useState({});
 
   console.log('DeskModal rendered with desk:', desk, 'clusters:', clusters, 'formData:', formData);
+  console.log('Clusters array:', clusters);
+  console.log('Cluster value in form:', formData.cluster);
 
   // Initialize cluster when editing - it might be an ID or a slug
   useEffect(() => {
@@ -146,13 +148,16 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
               id="cluster"
               name="cluster"
               value={formData.cluster}
-              onChange={handleChange}
+              onChange={e => {
+                console.log('Select onChange triggered, value:', e.target.value);
+                handleChange(e);
+              }}
               className={errors.cluster ? "error" : ""}
             >
               <option value="">Select a cluster</option>
               {clusters.map(c => (
                 <option key={c.id} value={c.id}>
-                  {c.name}
+                  {c.name} (ID: {c.id})
                 </option>
               ))}
             </select>
