@@ -46,7 +46,10 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
         // Otherwise, try to find by slug
         const clusterObj = clusters.find(c => c.slug === desk.cluster);
         if (clusterObj) {
-          setFormData(prev => ({ ...prev, cluster: clusterObj.id }));
+          const clusterId = clusterObj.id || clusterObj.pk;
+          if (clusterId) {
+            setFormData(prev => ({ ...prev, cluster: clusterId }));
+          }
         }
       }
     }
@@ -69,7 +72,7 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
     const newErrors = {};
     if (!formData.code.trim()) newErrors.code = "Code is required";
     if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.cluster || typeof formData.cluster !== 'number') newErrors.cluster = "Cluster is required";
+    if (!formData.cluster || (typeof formData.cluster !== 'number' && typeof formData.cluster !== 'string')) newErrors.cluster = "Cluster is required";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -87,7 +90,9 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
     // Convert cluster to number since it should be an ID
     let processedValue = value;
     if (name === 'cluster') {
-      processedValue = value ? parseInt(value, 10) : '';
+      // Try to parse as number, if it fails, keep as string (might be a slug)
+      const parsed = parseInt(value, 10);
+      processedValue = isNaN(parsed) ? value : parsed;
       console.log('Cluster selected:', value, 'Converted to:', processedValue);
     }
     setFormData(prev => ({ ...prev, [name]: processedValue }));
@@ -155,11 +160,15 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
               className={errors.cluster ? "error" : ""}
             >
               <option value="">Select a cluster</option>
-              {clusters.map(c => (
-                <option key={c.id} value={c.id}>
-                  {c.name} (ID: {c.id})
-                </option>
-              ))}
+              {clusters.map(c => {
+                const clusterId = c.id || c.pk;
+                const clusterValue = clusterId || c.slug;
+                return (
+                  <option key={clusterValue} value={clusterValue}>
+                    {c.name} (ID: {clusterId || 'N/A'})
+                  </option>
+                );
+              })}
             </select>
             {errors.cluster && <span className="error-text">{errors.cluster}</span>}
           </div>
@@ -227,6 +236,7 @@ export default function AdminDesks() {
   const fetchClusters = useCallback(async () => {
     try {
       const data = await get("/clusters/");
+      console.log("Clusters fetched from API:", data);
       setClusters(data);
     } catch (err) {
       console.error("Failed to load clusters:", err);

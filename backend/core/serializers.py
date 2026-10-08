@@ -11,7 +11,7 @@ class DeskSerializer(serializers.ModelSerializer):
 
 class ClusterSerializer(serializers.ModelSerializer):
     desk_count = serializers.IntegerField(source="desks.count", read_only=True)
-    class Meta: model = Cluster; fields = ["slug","name","short_name","desk_count"]
+    class Meta: model = Cluster; fields = ["id","slug","name","short_name","desk_count"]
 
 class PersonSerializer(serializers.ModelSerializer):
     photo = serializers.SerializerMethodField()
