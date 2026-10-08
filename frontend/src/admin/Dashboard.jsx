@@ -68,7 +68,7 @@ export default function Dashboard() {
           get("/desks/").catch(() => ({ length: 0 })),
           get("/clusters/").catch(() => ({ length: 0 })),
           get("/people/").catch(() => ({ length: 0 })),
-          get("/enquiries/").catch(() => ({ length: 0 })),
+          get("/admin/enquiries/").catch(() => ({ length: 0 })),
           get("/admin/activity/").catch(() => []),
         ]);
 

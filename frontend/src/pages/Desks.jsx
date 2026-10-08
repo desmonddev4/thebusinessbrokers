@@ -110,7 +110,7 @@ export default function Desks() {
         <div className="d-bar">
           <div className="d-search">
             <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1014 15.5l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 110-9 4.5 4.5 0 010 9z" />
+              <path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1014 15.5l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 0 1 1 0-9 4.5 0 0 1 0 9z" />
             </svg>
             <input
               type="search"
@@ -158,7 +158,7 @@ export default function Desks() {
         ) : shown.length === 0 ? (
           <div className="d-empty">
             <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1014 15.5l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 110-9 4.5 4.5 0 010 9z" />
+              <path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1014 15.5l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 0 1 1 0-9 4.5 0 0 1 0 9z" />
             </svg>
             <p>
               No desk matches that word. Try a plainer term such as land, hotel,
