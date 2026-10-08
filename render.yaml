@@ -36,10 +36,12 @@ services:
         value: "website@businessbrokers.com.gh"
       - key: LOG_LEVEL
         value: "INFO"
-      - key: DJANGO_SUPERUSER_USERNAME
-        value: ""
-      - key: DJANGO_SUPERUSER_EMAIL
-        value: ""
-      - key: DJANGO_SUPERUSER_PASSWORD
-        value: ""
+      # Admin credentials - set these in Render dashboard for security
+      # The start.sh script will create the admin user if these are set
+      # - key: DJANGO_SUPERUSER_USERNAME
+      #   value: "admin"
+      # - key: DJANGO_SUPERUSER_EMAIL
+      #   value: "admin@example.com"
+      # - key: DJANGO_SUPERUSER_PASSWORD
+      #   value: ""  # Set a strong password in Render dashboard
     healthCheckPath: /api/site/
