@@ -255,7 +255,7 @@ export default function AdminPeople() {
   const handleSave = async personData => {
     setIsSubmitting(true);
     try {
-      if (editingPerson) {
+      if (editingPerson && editingPerson.id) {
         await put(`/admin/people/${editingPerson.id}/`, personData);
         addToast("Person updated successfully", "success");
       } else {
@@ -421,7 +421,7 @@ export default function AdminPeople() {
 
       {editingPerson && (
         <PersonModal
-          person={editingPerson.id ? editingPerson : null}
+          person={editingPerson.id !== undefined ? editingPerson : null}
           onClose={() => setEditingPerson(null)}
           onSave={handleSave}
         />

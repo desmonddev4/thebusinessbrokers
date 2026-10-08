@@ -32,14 +32,14 @@ class EnquirySerializer(serializers.ModelSerializer):
 class DeskAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Desk
-        fields = "__all__"
+        fields = ["id", "code", "name", "slug", "strapline", "description", "focus_areas", "cluster", "order"]
 
 class PersonAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
-        fields = "__all__"
+        fields = ["id", "name", "kind", "role", "qualifications", "portfolio", "profile", "photo", "published", "order"]
 
 class EnquiryAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enquiry
-        fields = "__all__"
+        fields = ["id", "name", "contact", "desk", "message", "handled", "created"]

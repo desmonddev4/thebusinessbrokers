@@ -32,12 +32,18 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
   });
   const [errors, setErrors] = useState({});
 
-  // Map cluster slug to ID when editing
+  // Initialize cluster when editing - it might be an ID or a slug
   useEffect(() => {
     if (desk?.cluster && clusters.length > 0) {
-      const clusterObj = clusters.find(c => c.slug === desk.cluster);
-      if (clusterObj) {
-        setFormData(prev => ({ ...prev, cluster: clusterObj.id }));
+      // If cluster is already an ID, use it directly
+      if (typeof desk.cluster === 'number') {
+        setFormData(prev => ({ ...prev, cluster: desk.cluster }));
+      } else {
+        // Otherwise, try to find by slug
+        const clusterObj = clusters.find(c => c.slug === desk.cluster);
+        if (clusterObj) {
+          setFormData(prev => ({ ...prev, cluster: clusterObj.id }));
+        }
       }
     }
   }, [desk, clusters]);
@@ -248,7 +254,7 @@ export default function AdminDesks() {
   const handleSave = async deskData => {
     setIsSubmitting(true);
     try {
-      if (editingDesk) {
+      if (editingDesk && editingDesk.id) {
         await put(`/admin/desks/${editingDesk.id}/`, deskData);
         addToast("Desk updated successfully", "success");
       } else {
@@ -397,7 +403,7 @@ export default function AdminDesks() {
 
       {editingDesk && (
         <DeskModal
-          desk={editingDesk.id ? editingDesk : null}
+          desk={editingDesk.id !== undefined ? editingDesk : null}
           clusters={clusters}
           onClose={() => setEditingDesk(null)}
           onSave={handleSave}
