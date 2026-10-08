@@ -21,9 +21,9 @@ const getHeaders = () => {
 
 export const get = (p) =>
   fetch(`${B}${p}`, { headers: getHeaders() }).then(r => {
-    if (!r.ok) throw { status: r.status, message: getErrorMessage(r.status) };
+    if (!r.ok) throw { status: r.status, message: getErrorMessage(r.status), data: null };
     return r.json().catch(() => {
-      throw { status: r.status, message: getErrorMessage(r.status, true) };
+      throw { status: r.status, message: getErrorMessage(r.status, true), data: null };
     });
   });
 

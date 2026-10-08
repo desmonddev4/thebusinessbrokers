@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Max
 from .models import Cluster, Desk, Person, Enquiry
 
 class DeskSerializer(serializers.ModelSerializer):
@@ -34,11 +35,31 @@ class DeskAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Desk
         fields = ["id", "code", "name", "slug", "strapline", "description", "focus_areas", "cluster", "cluster_name", "order"]
+        read_only_fields = ["slug", "cluster_name"]
+
+    def create(self, validated_data):
+        from django.utils.text import slugify
+        if 'slug' not in validated_data or not validated_data['slug']:
+            validated_data['slug'] = slugify(validated_data['name'])[:50]
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        from django.utils.text import slugify
+        if 'name' in validated_data and validated_data['name'] != instance.name:
+            validated_data['slug'] = slugify(validated_data['name'])[:50]
+        return super().update(instance, validated_data)
 
 class PersonAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         fields = ["id", "name", "kind", "role", "qualifications", "portfolio", "profile", "photo", "published", "order"]
+        read_only_fields = ["order"]
+
+    def create(self, validated_data):
+        if 'order' not in validated_data:
+            max_order = Person.objects.filter(kind=validated_data.get('kind')).aggregate(Max('order'))['order__max'] or 0
+            validated_data['order'] = max_order + 1
+        return super().create(validated_data)
 
 class EnquiryAdminSerializer(serializers.ModelSerializer):
     class Meta:
