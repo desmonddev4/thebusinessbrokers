@@ -176,6 +176,64 @@
 .dashboard-empty-icon svg { width: 26px; height: 26px; fill: var(--db-gold-500); }
 .dashboard-placeholder { margin: 0; color: #5a6a90; font-weight: 500; }
 
+/* ---------- Activity list ---------- */
+.activity-list {
+  display: flex; flex-direction: column; gap: 0.75rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+.activity-list::-webkit-scrollbar { width: 6px; }
+.activity-list::-webkit-scrollbar-track { background: var(--db-navy-50); border-radius: 3px; }
+.activity-list::-webkit-scrollbar-thumb { background: var(--db-gold-500); border-radius: 3px; }
+
+.activity-item {
+  display: flex; align-items: flex-start; gap: 0.85rem;
+  padding: 0.85rem;
+  border-radius: 12px;
+  background: var(--db-navy-50);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.activity-item:hover {
+  transform: translateX(4px);
+  background: rgba(232, 163, 23, 0.08);
+}
+
+.activity-icon {
+  flex: none; display: grid; place-items: center;
+  width: 36px; height: 36px; border-radius: 10px;
+  transition: transform 0.2s ease;
+}
+.activity-icon svg { width: 18px; height: 18px; fill: #fff; }
+.activity-item:hover .activity-icon { transform: scale(1.1); }
+
+.activity-icon--green { background: linear-gradient(135deg, #22c55e, #16a34a); }
+.activity-icon--blue { background: linear-gradient(135deg, #3b8bff, var(--db-blue-500)); }
+.activity-icon--red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.activity-icon--gray { background: linear-gradient(135deg, #6b7280, #4b5563); }
+
+.activity-content {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 0.35rem;
+}
+.activity-description {
+  margin: 0;
+  font-size: 0.88rem; font-weight: 500;
+  color: var(--db-navy-900);
+  line-height: 1.4;
+}
+.activity-meta {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.75rem; color: #5a6a90;
+}
+.activity-user {
+  font-weight: 600;
+  color: var(--db-navy-700);
+}
+.activity-time {
+  opacity: 0.8;
+}
+
 /* ---------- Animations ---------- */
 @keyframes dbRise {
   from { opacity: 0; transform: translateY(16px); }

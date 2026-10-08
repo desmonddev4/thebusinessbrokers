@@ -7,10 +7,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import Cluster, Desk, Person, Enquiry
+from .models import Cluster, Desk, Person, Enquiry, ActivityLog
 from .serializers import (
     ClusterSerializer, DeskSerializer, PersonSerializer, EnquirySerializer,
-    DeskAdminSerializer, PersonAdminSerializer, EnquiryAdminSerializer
+    DeskAdminSerializer, PersonAdminSerializer, EnquiryAdminSerializer, ActivityLogSerializer
 )
 
 User = get_user_model()
@@ -107,7 +107,17 @@ class DeskListAdmin(generics.ListCreateAPIView):
         logger = logging.getLogger(__name__)
         logger.warning(f"Desk create request data: {request.data}")
         try:
-            return super().create(request, *args, **kwargs)
+            response = super().create(request, *args, **kwargs)
+            # Log activity
+            ActivityLog.objects.create(
+                action=ActivityLog.ActionType.CREATE,
+                content_type=ActivityLog.ContentType.DESK,
+                object_id=response.data.get('id'),
+                object_name=response.data.get('name'),
+                description=f"Created desk: {response.data.get('name')} ({response.data.get('code')})",
+                user=request.user.username if request.user.is_authenticated else 'Anonymous'
+            )
+            return response
         except Exception as e:
             logger.error(f"Desk create error: {str(e)}")
             raise
@@ -117,15 +127,77 @@ class DeskDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DeskAdminSerializer
     permission_classes = [IsAuthenticated]
 
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        desk = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.UPDATE,
+            content_type=ActivityLog.ContentType.DESK,
+            object_id=desk.id,
+            object_name=desk.name,
+            description=f"Updated desk: {desk.name} ({desk.code})",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+    def destroy(self, request, *args, **kwargs):
+        desk = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.DELETE,
+            content_type=ActivityLog.ContentType.DESK,
+            object_id=desk.id,
+            object_name=desk.name,
+            description=f"Deleted desk: {desk.name} ({desk.code})",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return super().destroy(request, *args, **kwargs)
+
 class PersonListAdmin(generics.ListCreateAPIView):
     queryset = Person.objects.all()
     serializer_class = PersonAdminSerializer
     permission_classes = [IsAuthenticated]
 
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.CREATE,
+            content_type=ActivityLog.ContentType.PERSON,
+            object_id=response.data.get('id'),
+            object_name=response.data.get('name'),
+            description=f"Created person: {response.data.get('name')} ({response.data.get('kind')})",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
 class PersonDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
     queryset = Person.objects.all()
     serializer_class = PersonAdminSerializer
     permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        person = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.UPDATE,
+            content_type=ActivityLog.ContentType.PERSON,
+            object_id=person.id,
+            object_name=person.name,
+            description=f"Updated person: {person.name} ({person.kind})",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+    def destroy(self, request, *args, **kwargs):
+        person = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.DELETE,
+            content_type=ActivityLog.ContentType.PERSON,
+            object_id=person.id,
+            object_name=person.name,
+            description=f"Deleted person: {person.name} ({person.kind})",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return super().destroy(request, *args, **kwargs)
 
 class EnquiryListAdmin(generics.ListAPIView):
     queryset = Enquiry.objects.select_related('desk').all()
@@ -136,6 +208,25 @@ class EnquiryDetailAdmin(generics.RetrieveUpdateAPIView):
     queryset = Enquiry.objects.all()
     serializer_class = EnquiryAdminSerializer
     permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        enquiry = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.UPDATE,
+            content_type=ActivityLog.ContentType.ENQUIRY,
+            object_id=enquiry.id,
+            object_name=enquiry.name,
+            description=f"Updated enquiry from {enquiry.name}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+class ActivityLogListAdmin(generics.ListAPIView):
+    queryset = ActivityLog.objects.all()[:20]
+    serializer_class = ActivityLogSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = None
 
 def spa(request, path=""):
     """Serve the React app for its client-side routes. Unknown paths get the same shell with a real 404 status."""

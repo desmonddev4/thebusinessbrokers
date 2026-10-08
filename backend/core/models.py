@@ -44,3 +44,31 @@ class Enquiry(models.Model):
     handled = models.BooleanField(default=False)
     class Meta: ordering = ["-created"]; verbose_name_plural = "enquiries"
     def __str__(self): return f"{self.name} ({self.created:%d %b %Y})"
+
+class ActivityLog(models.Model):
+    class ActionType(models.TextChoices):
+        CREATE = "create"
+        UPDATE = "update"
+        DELETE = "delete"
+        VIEW = "view"
+
+    class ContentType(models.TextChoices):
+        DESK = "desk"
+        PERSON = "person"
+        ENQUIRY = "enquiry"
+
+    timestamp = models.DateTimeField(auto_now_add=True)
+    action = models.CharField(max_length=10, choices=ActionType.choices)
+    content_type = models.CharField(max_length=10, choices=ContentType.choices)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    object_name = models.CharField(max_length=200, blank=True)
+    description = models.TextField(blank=True)
+    user = models.CharField(max_length=150, blank=True)
+
+    class Meta:
+        ordering = ["-timestamp"]
+        verbose_name = "activity log"
+        verbose_name_plural = "activity logs"
+
+    def __str__(self):
+        return f"{self.get_action_display()} {self.get_content_type_display()} - {self.object_name or self.object_id}"

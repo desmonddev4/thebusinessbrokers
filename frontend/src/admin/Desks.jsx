@@ -32,10 +32,6 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
   });
   const [errors, setErrors] = useState({});
 
-  console.log('DeskModal rendered with desk:', desk, 'clusters:', clusters, 'formData:', formData);
-  console.log('Clusters array:', clusters);
-  console.log('Cluster value in form:', formData.cluster);
-
   // Initialize cluster when editing - it might be an ID or a slug
   useEffect(() => {
     if (desk?.cluster && clusters.length > 0) {
@@ -93,7 +89,6 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
       // Try to parse as number, if it fails, keep as string (might be a slug)
       const parsed = parseInt(value, 10);
       processedValue = isNaN(parsed) ? value : parsed;
-      console.log('Cluster selected:', value, 'Converted to:', processedValue);
     }
     setFormData(prev => ({ ...prev, [name]: processedValue }));
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: "" }));
@@ -153,10 +148,7 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
               id="cluster"
               name="cluster"
               value={formData.cluster}
-              onChange={e => {
-                console.log('Select onChange triggered, value:', e.target.value);
-                handleChange(e);
-              }}
+              onChange={handleChange}
               className={errors.cluster ? "error" : ""}
             >
               <option value="">Select a cluster</option>
@@ -236,7 +228,6 @@ export default function AdminDesks() {
   const fetchClusters = useCallback(async () => {
     try {
       const data = await get("/clusters/");
-      console.log("Clusters fetched from API:", data);
       setClusters(data);
     } catch (err) {
       console.error("Failed to load clusters:", err);

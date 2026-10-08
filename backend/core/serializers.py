@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.db.models import Max
-from .models import Cluster, Desk, Person, Enquiry
+from .models import Cluster, Desk, Person, Enquiry, ActivityLog
 
 class DeskSerializer(serializers.ModelSerializer):
     cluster = serializers.SlugRelatedField(slug_field="slug", read_only=True)
@@ -66,3 +66,12 @@ class EnquiryAdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enquiry
         fields = ["id", "name", "contact", "desk", "message", "handled", "created"]
+
+class ActivityLogSerializer(serializers.ModelSerializer):
+    action_display = serializers.CharField(source="get_action_display", read_only=True)
+    content_type_display = serializers.CharField(source="get_content_type_display", read_only=True)
+
+    class Meta:
+        model = ActivityLog
+        fields = ["id", "timestamp", "action", "action_display", "content_type", "content_type_display",
+                  "object_id", "object_name", "description", "user"]

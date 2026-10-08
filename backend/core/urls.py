@@ -16,4 +16,5 @@ urlpatterns = [
     path("admin/people/<int:pk>/", v.PersonDetailAdmin.as_view()),
     path("admin/enquiries/", v.EnquiryListAdmin.as_view()),
     path("admin/enquiries/<int:pk>/", v.EnquiryDetailAdmin.as_view()),
+    path("admin/activity/", v.ActivityLogListAdmin.as_view()),
 ]

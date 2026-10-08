@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cluster, Desk, Person, Enquiry
+from .models import Cluster, Desk, Person, Enquiry, ActivityLog
 @admin.register(Cluster)
 class ClusterAdmin(admin.ModelAdmin): list_display = ["order","name"]; prepopulated_fields = {"slug":("short_name",)}
 @admin.register(Desk)
@@ -12,3 +12,8 @@ class PersonAdmin(admin.ModelAdmin): list_display = ["name","kind","order","publ
 class EnquiryAdmin(admin.ModelAdmin):
     list_display = ["name","contact","desk","created","handled"]; list_filter = ["handled","desk"]
     readonly_fields = ["created"]
+@admin.register(ActivityLog)
+class ActivityLogAdmin(admin.ModelAdmin):
+    list_display = ["timestamp","action","content_type","object_name","user"]
+    list_filter = ["action","content_type"]
+    readonly_fields = ["timestamp"]
