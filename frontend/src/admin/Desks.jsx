@@ -32,6 +32,8 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
   });
   const [errors, setErrors] = useState({});
 
+  console.log('DeskModal rendered with desk:', desk, 'clusters:', clusters, 'formData:', formData);
+
   // Initialize cluster when editing - it might be an ID or a slug
   useEffect(() => {
     if (desk?.cluster && clusters.length > 0) {
@@ -81,7 +83,11 @@ function DeskModal({ desk, clusters, onClose, onSave }) {
   const handleChange = e => {
     const { name, value } = e.target;
     // Convert cluster to number since it should be an ID
-    const processedValue = name === 'cluster' ? (value ? parseInt(value, 10) : '') : value;
+    let processedValue = value;
+    if (name === 'cluster') {
+      processedValue = value ? parseInt(value, 10) : '';
+      console.log('Cluster selected:', value, 'Converted to:', processedValue);
+    }
     setFormData(prev => ({ ...prev, [name]: processedValue }));
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: "" }));
   };
