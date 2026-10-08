@@ -14,7 +14,6 @@ import AdminEnquiries from "./admin/Enquiries.jsx";
 import ActivityReport from "./admin/ActivityReport.jsx";
 import AdminClusters from "./admin/Clusters.jsx";
 import AdminSiteContent from "./admin/SiteContent.jsx";
-import AdminSiteSettings from "./admin/SiteSettings.jsx";
 import AdminSiteInfo from "./admin/SiteInfo.jsx";
 import UserManagement from "./admin/UserManagement.jsx";
 import MediaManagement from "./admin/MediaManagement.jsx";
@@ -51,7 +50,6 @@ export default function App() {
               <Route path="enquiries" element={<AdminEnquiries/>}/>
               <Route path="activity" element={<ActivityReport/>}/>
               <Route path="content" element={<AdminSiteContent/>}/>
-              <Route path="settings" element={<AdminSiteSettings/>}/>
               <Route path="siteinfo" element={<AdminSiteInfo/>}/>
               <Route path="users" element={<UserManagement/>}/>
               <Route path="media" element={<MediaManagement/>}/>
