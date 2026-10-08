@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteInfo, SiteContent, SiteSettings
+from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteContent, SiteSettings
 @admin.register(Cluster)
 class ClusterAdmin(admin.ModelAdmin): list_display = ["order","name"]; prepopulated_fields = {"slug":("short_name",)}
 @admin.register(Desk)
@@ -17,11 +17,6 @@ class ActivityLogAdmin(admin.ModelAdmin):
     list_display = ["timestamp","action","content_type","object_name","user"]
     list_filter = ["action","content_type"]
     readonly_fields = ["timestamp"]
-
-@admin.register(SiteInfo)
-class SiteInfoAdmin(admin.ModelAdmin):
-    list_display = ["name","registration","tin"]
-    readonly_fields = ["updated_at"]
 
 @admin.register(SiteContent)
 class SiteContentAdmin(admin.ModelAdmin):
