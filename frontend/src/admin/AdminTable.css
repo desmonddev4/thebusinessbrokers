@@ -270,6 +270,48 @@
 .admin-page .btn-ghost:hover { background: rgba(232, 163, 23, 0.12); border-color: var(--at-gold-500); transform: translateY(-1px); }
 .admin-page .modal-actions .btn-primary { margin-left: 0; text-decoration: none; }
 
+/* ---------- Modal Form ---------- */
+.admin-page .modal-form { display: flex; flex-direction: column; gap: 1.25rem; }
+.admin-page .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.admin-page .form-group label {
+  font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--at-gold-700);
+}
+.admin-page .form-group input,
+.admin-page .form-group select,
+.admin-page .form-group textarea {
+  padding: 0.75rem 1rem; border: 2px solid var(--at-navy-100); border-radius: 12px;
+  font: inherit; font-size: 0.95rem; color: var(--at-navy-900);
+  background: #fff; transition: border-color 0.25s, box-shadow 0.25s;
+}
+.admin-page .form-group input:focus,
+.admin-page .form-group select:focus,
+.admin-page .form-group textarea:focus {
+  outline: none; border-color: var(--at-gold-500);
+  box-shadow: 0 0 0 4px rgba(255, 224, 102, 0.3);
+}
+.admin-page .form-group input.error,
+.admin-page .form-group select.error,
+.admin-page .form-group textarea.error {
+  border-color: var(--at-danger);
+}
+.admin-page .form-group .error-text {
+  font-size: 0.85rem; color: var(--at-danger); margin-top: 0.2rem;
+}
+.admin-page .form-group textarea { resize: vertical; min-height: 100px; }
+.admin-page .form-group select { cursor: pointer; }
+.admin-page .form-group input::placeholder { color: rgba(3, 26, 77, 0.4); }
+.admin-page .form-group.checkbox-group { flex-direction: row; align-items: center; }
+.admin-page .form-group.checkbox-group label {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.95rem; font-weight: 500; text-transform: none; letter-spacing: normal;
+  color: var(--at-navy-900); cursor: pointer;
+}
+.admin-page .form-group.checkbox-group input[type="checkbox"] {
+  width: 20px; height: 20px; cursor: pointer;
+  accent-color: var(--at-gold-500);
+}
+
 /* ---------- Animations ---------- */
 @keyframes atRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes atFade { from { opacity: 0; } to { opacity: 1; } }

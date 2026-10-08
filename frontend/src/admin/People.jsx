@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { get } from "../api.js";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
+import { get, post, put, del } from "../api.js";
 import { useToast } from "../ToastContext.jsx";
 import "./AdminTable.css";
 
@@ -34,19 +34,189 @@ const FILTERS = [
   { key: "adviser", label: "Advisers" },
 ];
 
+function PersonModal({ person, onClose, onSave }) {
+  const closeRef = useRef(null);
+  const [formData, setFormData] = useState({
+    name: person?.name || "",
+    kind: person?.kind || "adviser",
+    role: person?.role || "",
+    qualifications: person?.qualifications || "",
+    portfolio: person?.portfolio || "",
+    profile: person?.profile || "",
+    published: person?.published !== undefined ? person.published : true,
+  });
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    closeRef.current?.focus();
+    const onKey = e => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.kind) newErrors.kind = "Type is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    onSave(formData);
+  };
+
+  const handleChange = e => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: "" }));
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="person-title"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="modal-head">
+          <div>
+            <h2 id="person-title">{person ? "Edit Person" : "Add New Person"}</h2>
+            <p>{person ? "Update person information" : "Add a new director or adviser"}</p>
+          </div>
+          <button ref={closeRef} type="button" className="modal-close" aria-label="Close" onClick={onClose}>
+            <Icon d={ICONS.close} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="modal-form">
+          <div className="form-group">
+            <label htmlFor="name">Name *</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              value={formData.name}
+              onChange={handleChange}
+              className={errors.name ? "error" : ""}
+              placeholder="Full name"
+            />
+            {errors.name && <span className="error-text">{errors.name}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="kind">Type *</label>
+            <select
+              id="kind"
+              name="kind"
+              value={formData.kind}
+              onChange={handleChange}
+              className={errors.kind ? "error" : ""}
+            >
+              <option value="adviser">Adviser</option>
+              <option value="director">Director</option>
+            </select>
+            {errors.kind && <span className="error-text">{errors.kind}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="role">Role</label>
+            <input
+              id="role"
+              name="role"
+              type="text"
+              value={formData.role}
+              onChange={handleChange}
+              placeholder="Job title"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="qualifications">Qualifications</label>
+            <input
+              id="qualifications"
+              name="qualifications"
+              type="text"
+              value={formData.qualifications}
+              onChange={handleChange}
+              placeholder="Professional qualifications"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="portfolio">Portfolio</label>
+            <input
+              id="portfolio"
+              name="portfolio"
+              type="text"
+              value={formData.portfolio}
+              onChange={handleChange}
+              placeholder="Areas of expertise"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="profile">Profile</label>
+            <textarea
+              id="profile"
+              name="profile"
+              value={formData.profile}
+              onChange={handleChange}
+              rows={4}
+              placeholder="Biographical information"
+            />
+          </div>
+
+          <div className="form-group checkbox-group">
+            <label>
+              <input
+                type="checkbox"
+                name="published"
+                checked={formData.published}
+                onChange={handleChange}
+              />
+              <span>Published (visible on website)</span>
+            </label>
+          </div>
+
+          <div className="modal-actions">
+            <button type="button" className="btn-ghost" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="btn-primary">
+              {person ? "Update Person" : "Create Person"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export default function AdminPeople() {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+  const [editingPerson, setEditingPerson] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { addToast } = useToast();
 
   const fetchPeople = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const data = await get("/people/");
+      const data = await get("/admin/people/");
       setPeople(data);
     } catch (err) {
       const msg = err.message || "Failed to load people";
@@ -81,6 +251,38 @@ export default function AdminPeople() {
           p.portfolio?.toLowerCase().includes(t))
     );
   }, [people, search, filter]);
+
+  const handleSave = async personData => {
+    setIsSubmitting(true);
+    try {
+      if (editingPerson) {
+        await put(`/admin/people/${editingPerson.id}/`, personData);
+        addToast("Person updated successfully", "success");
+      } else {
+        await post("/admin/people/", personData);
+        addToast("Person created successfully", "success");
+      }
+      setEditingPerson(null);
+      fetchPeople();
+    } catch (err) {
+      const msg = err.message || "Failed to save person";
+      addToast(msg, "error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async person => {
+    if (!confirm(`Are you sure you want to delete "${person.name}"?`)) return;
+    try {
+      await del(`/admin/people/${person.id}/`);
+      addToast("Person deleted successfully", "success");
+      fetchPeople();
+    } catch (err) {
+      const msg = err.message || "Failed to delete person";
+      addToast(msg, "error");
+    }
+  };
 
   return (
     <div className="admin-page">
@@ -121,7 +323,7 @@ export default function AdminPeople() {
           ))}
         </div>
 
-        <button type="button" className="btn-primary">
+        <button type="button" className="btn-primary" onClick={() => setEditingPerson({})}>
           <Icon d={ICONS.add} />
           Add Person
         </button>
@@ -183,7 +385,13 @@ export default function AdminPeople() {
                     </td>
                     <td>
                       <div className="action-buttons">
-                        <button type="button" className="btn-icon" title="Edit" aria-label={`Edit ${person.name}`}>
+                        <button
+                          type="button"
+                          className="btn-icon"
+                          title="Edit"
+                          aria-label={`Edit ${person.name}`}
+                          onClick={() => setEditingPerson(person)}
+                        >
                           <Icon d={ICONS.edit} />
                         </button>
                         <button
@@ -191,6 +399,7 @@ export default function AdminPeople() {
                           className="btn-icon btn-icon-danger"
                           title="Delete"
                           aria-label={`Delete ${person.name}`}
+                          onClick={() => handleDelete(person)}
                         >
                           <Icon d={ICONS.trash} />
                         </button>
@@ -209,6 +418,14 @@ export default function AdminPeople() {
           </>
         )}
       </div>
+
+      {editingPerson && (
+        <PersonModal
+          person={editingPerson.id ? editingPerson : null}
+          onClose={() => setEditingPerson(null)}
+          onSave={handleSave}
+        />
+      )}
     </div>
   );
 }

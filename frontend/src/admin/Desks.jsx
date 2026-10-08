@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { get } from "../api.js";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
+import { get, post, put, del } from "../api.js";
 import { useToast } from "../ToastContext.jsx";
 import "./AdminTable.css";
 
@@ -20,18 +20,205 @@ const Icon = ({ d }) => (
   </svg>
 );
 
+function DeskModal({ desk, clusters, onClose, onSave }) {
+  const closeRef = useRef(null);
+  const [formData, setFormData] = useState({
+    code: desk?.code || "",
+    name: desk?.name || "",
+    strapline: desk?.strapline || "",
+    description: desk?.description || "",
+    cluster: desk?.cluster || "",
+    focus_areas: desk?.focus_areas || [],
+  });
+  const [errors, setErrors] = useState({});
+
+  // Map cluster slug to ID when editing
+  useEffect(() => {
+    if (desk?.cluster && clusters.length > 0) {
+      const clusterObj = clusters.find(c => c.slug === desk.cluster);
+      if (clusterObj) {
+        setFormData(prev => ({ ...prev, cluster: clusterObj.id }));
+      }
+    }
+  }, [desk, clusters]);
+
+  useEffect(() => {
+    closeRef.current?.focus();
+    const onKey = e => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    const newErrors = {};
+    if (!formData.code.trim()) newErrors.code = "Code is required";
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.cluster) newErrors.cluster = "Cluster is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    onSave({
+      ...formData,
+      focus_areas: Array.isArray(formData.focus_areas) ? formData.focus_areas : [],
+    });
+  };
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: "" }));
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="desk-title"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="modal-head">
+          <div>
+            <h2 id="desk-title">{desk ? "Edit Desk" : "Add New Desk"}</h2>
+            <p>{desk ? "Update desk information" : "Create a new brokerage desk"}</p>
+          </div>
+          <button ref={closeRef} type="button" className="modal-close" aria-label="Close" onClick={onClose}>
+            <Icon d={ICONS.close} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="modal-form">
+          <div className="form-group">
+            <label htmlFor="code">Code *</label>
+            <input
+              id="code"
+              name="code"
+              type="text"
+              value={formData.code}
+              onChange={handleChange}
+              className={errors.code ? "error" : ""}
+              placeholder="e.g., TEC"
+            />
+            {errors.code && <span className="error-text">{errors.code}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="name">Name *</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              value={formData.name}
+              onChange={handleChange}
+              className={errors.name ? "error" : ""}
+              placeholder="e.g., Technology"
+            />
+            {errors.name && <span className="error-text">{errors.name}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="cluster">Cluster *</label>
+            <select
+              id="cluster"
+              name="cluster"
+              value={formData.cluster}
+              onChange={handleChange}
+              className={errors.cluster ? "error" : ""}
+            >
+              <option value="">Select a cluster</option>
+              {clusters.map(c => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+            {errors.cluster && <span className="error-text">{errors.cluster}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="strapline">Strapline</label>
+            <input
+              id="strapline"
+              name="strapline"
+              type="text"
+              value={formData.strapline}
+              onChange={handleChange}
+              placeholder="Short tagline"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              rows={4}
+              placeholder="Detailed description"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="focus_areas">Focus Areas (comma-separated)</label>
+            <input
+              id="focus_areas"
+              name="focus_areas"
+              type="text"
+              value={Array.isArray(formData.focus_areas) ? formData.focus_areas.join(", ") : formData.focus_areas}
+              onChange={e => setFormData(prev => ({ ...prev, focus_areas: e.target.value.split(",").map(s => s.trim()).filter(Boolean) }))}
+              placeholder="e.g., Software, Hardware, Services"
+            />
+          </div>
+
+          <div className="modal-actions">
+            <button type="button" className="btn-ghost" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="btn-primary">
+              {desk ? "Update Desk" : "Create Desk"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export default function AdminDesks() {
   const [desks, setDesks] = useState([]);
+  const [clusters, setClusters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [editingDesk, setEditingDesk] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { addToast } = useToast();
+
+  const fetchClusters = useCallback(async () => {
+    try {
+      const data = await get("/clusters/");
+      setClusters(data);
+    } catch (err) {
+      console.error("Failed to load clusters:", err);
+    }
+  }, []);
 
   const fetchDesks = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const data = await get("/desks/");
+      const data = await get("/admin/desks/");
       setDesks(data);
     } catch (err) {
       const msg = err.message || "Failed to load desks";
@@ -44,7 +231,8 @@ export default function AdminDesks() {
 
   useEffect(() => {
     fetchDesks();
-  }, [fetchDesks]);
+    fetchClusters();
+  }, [fetchDesks, fetchClusters]);
 
   const filteredDesks = useMemo(() => {
     const t = search.trim().toLowerCase();
@@ -56,6 +244,38 @@ export default function AdminDesks() {
         d.cluster_name?.toLowerCase().includes(t)
     );
   }, [desks, search]);
+
+  const handleSave = async deskData => {
+    setIsSubmitting(true);
+    try {
+      if (editingDesk) {
+        await put(`/admin/desks/${editingDesk.id}/`, deskData);
+        addToast("Desk updated successfully", "success");
+      } else {
+        await post("/admin/desks/", deskData);
+        addToast("Desk created successfully", "success");
+      }
+      setEditingDesk(null);
+      fetchDesks();
+    } catch (err) {
+      const msg = err.message || "Failed to save desk";
+      addToast(msg, "error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async desk => {
+    if (!confirm(`Are you sure you want to delete "${desk.name}"?`)) return;
+    try {
+      await del(`/admin/desks/${desk.id}/`);
+      addToast("Desk deleted successfully", "success");
+      fetchDesks();
+    } catch (err) {
+      const msg = err.message || "Failed to delete desk";
+      addToast(msg, "error");
+    }
+  };
 
   return (
     <div className="admin-page">
@@ -81,7 +301,7 @@ export default function AdminDesks() {
           )}
         </div>
 
-        <button type="button" className="btn-primary">
+        <button type="button" className="btn-primary" onClick={() => setEditingDesk({})}>
           <Icon d={ICONS.add} />
           Add New Desk
         </button>
@@ -141,7 +361,13 @@ export default function AdminDesks() {
                     </td>
                     <td>
                       <div className="action-buttons">
-                        <button type="button" className="btn-icon" title="Edit" aria-label={`Edit ${desk.name}`}>
+                        <button
+                          type="button"
+                          className="btn-icon"
+                          title="Edit"
+                          aria-label={`Edit ${desk.name}`}
+                          onClick={() => setEditingDesk(desk)}
+                        >
                           <Icon d={ICONS.edit} />
                         </button>
                         <button
@@ -149,6 +375,7 @@ export default function AdminDesks() {
                           className="btn-icon btn-icon-danger"
                           title="Delete"
                           aria-label={`Delete ${desk.name}`}
+                          onClick={() => handleDelete(desk)}
                         >
                           <Icon d={ICONS.trash} />
                         </button>
@@ -167,6 +394,15 @@ export default function AdminDesks() {
           </>
         )}
       </div>
+
+      {editingDesk && (
+        <DeskModal
+          desk={editingDesk.id ? editingDesk : null}
+          clusters={clusters}
+          onClose={() => setEditingDesk(null)}
+          onSave={handleSave}
+        />
+      )}
     </div>
   );
 }

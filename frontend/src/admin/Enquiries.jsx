@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { get } from "../api.js";
+import { get, del } from "../api.js";
 import { useToast } from "../ToastContext.jsx";
 import "./AdminTable.css";
 
@@ -113,7 +113,7 @@ export default function AdminEnquiries() {
     setLoading(true);
     setError("");
     try {
-      const data = await get("/enquiries/");
+      const data = await get("/admin/enquiries/");
       setEnquiries(data);
     } catch (err) {
       const msg = err.message || "Failed to load enquiries";
@@ -129,6 +129,18 @@ export default function AdminEnquiries() {
   }, [fetchEnquiries]);
 
   const closeModal = useCallback(() => setSelected(null), []);
+
+  const handleDelete = async enquiry => {
+    if (!confirm(`Are you sure you want to delete enquiry from "${enquiry.name}"?`)) return;
+    try {
+      await del(`/admin/enquiries/${enquiry.id}/`);
+      addToast("Enquiry deleted successfully", "success");
+      fetchEnquiries();
+    } catch (err) {
+      const msg = err.message || "Failed to delete enquiry";
+      addToast(msg, "error");
+    }
+  };
 
   const filteredEnquiries = useMemo(() => {
     const t = search.trim().toLowerCase();
@@ -240,6 +252,7 @@ export default function AdminEnquiries() {
                           className="btn-icon btn-icon-danger"
                           title="Delete"
                           aria-label={`Delete enquiry from ${enquiry.name}`}
+                          onClick={() => handleDelete(enquiry)}
                         >
                           <Icon d={ICONS.trash} />
                         </button>

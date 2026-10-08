@@ -69,17 +69,10 @@ class LoginView(APIView):
         except User.DoesNotExist:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        # Debug logging
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.warning(f"Login attempt for username: {username}, is_staff: {user.is_staff}, is_superuser: {user.is_superuser}")
-
         if not user.check_password(password):
-            logger.warning(f"Password check failed for user: {username}")
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
         if not user.is_staff:
-            logger.warning(f"User {username} is not staff")
             return Response({'error': 'Admin access only'}, status=status.HTTP_403_FORBIDDEN)
 
         refresh = RefreshToken.for_user(user)
