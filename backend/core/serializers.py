@@ -114,25 +114,26 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
 #         fields = ["id", "name", "registration", "incorporated", "company_type",
 #                   "address", "post", "phones", "tin", "auditors", "email", "updated_at"]
 
-class MediaFileSerializer(serializers.ModelSerializer):
-    file_url = serializers.SerializerMethodField()
-    file_size_display = serializers.SerializerMethodField()
-
-    def get_file_url(self, obj):
-        if obj.file:
-            return obj.file.url
-        return None
-
-    def get_file_size_display(self, obj):
-        size = obj.file_size
-        for unit in ['B', 'KB', 'MB', 'GB']:
-            if size < 1024:
-                return f"{size:.1f} {unit}"
-            size /= 1024
-        return f"{size:.1f} TB"
-
-    class Meta:
-        model = MediaFile
-        fields = ["id", "file", "file_url", "filename", "file_type", "file_size", "file_size_display",
-                  "uploaded_at", "uploaded_by", "alt_text", "description"]
-        read_only_fields = ["uploaded_at", "file_size", "file_size_display"]
+# MediaFileSerializer temporarily commented out until migrations run
+# class MediaFileSerializer(serializers.ModelSerializer):
+#     file_url = serializers.SerializerMethodField()
+#     file_size_display = serializers.SerializerMethodField()
+#
+#     def get_file_url(self, obj):
+#         if obj.file:
+#             return obj.file.url
+#         return None
+#
+#     def get_file_size_display(self, obj):
+#         size = obj.file_size
+#         for unit in ['B', 'KB', 'MB', 'GB']:
+#             if size < 1024:
+#                 return f"{size:.1f} {unit}"
+#             size /= 1024
+#         return f"{size:.1f} TB"
+#
+#     class Meta:
+#         model = MediaFile
+#         fields = ["id", "file", "file_url", "filename", "file_type", "file_size", "file_size_display",
+#                   "uploaded_at", "uploaded_by", "alt_text", "description"]
+#         read_only_fields = ["uploaded_at", "file_size", "file_size_display"]
