@@ -11,7 +11,7 @@ urlpatterns = [
     path("desks/", v.DeskList.as_view()),
     path("people/", v.PersonList.as_view()),
     path("enquiries/", v.EnquiryCreate.as_view()),
-    path("site/", v.SiteInfo.as_view()),
+    path("site/", v.SiteInfoView.as_view()),
     path("content/", v.SiteContentView.as_view()),
     # Admin endpoints (require authentication)
     path("admin/clusters/", v.ClusterListAdmin.as_view()),
@@ -27,10 +27,8 @@ urlpatterns = [
     path("admin/content/<int:pk>/", v.SiteContentDetailAdmin.as_view()),
     path("admin/settings/", v.SiteSettingsListAdmin.as_view()),
     path("admin/settings/<int:pk>/", v.SiteSettingsDetailAdmin.as_view()),
-    # SiteInfo admin routes temporarily commented out until migrations run
-    # path("admin/siteinfo/", v.SiteInfoListAdmin.as_view()),
-    # path("admin/siteinfo/<int:pk>/", v.SiteInfoDetailAdmin.as_view()),
-    # Media admin routes temporarily commented out until migrations run
-    # path("admin/media/", v.MediaFileListAdmin.as_view()),
-    # path("admin/media/<int:pk>/", v.MediaFileDetailAdmin.as_view()),
+    path("admin/siteinfo/", v.SiteInfoListAdmin.as_view()),
+    path("admin/siteinfo/<int:pk>/", v.SiteInfoDetailAdmin.as_view()),
+    path("admin/media/", v.MediaFileListAdmin.as_view()),
+    path("admin/media/<int:pk>/", v.MediaFileDetailAdmin.as_view()),
 ]

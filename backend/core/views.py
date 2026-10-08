@@ -8,15 +8,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteContent, SiteSettings
-# SiteInfo and MediaFile temporarily commented out until migrations run
-# from .models import SiteInfo, MediaFile
+from .models import Cluster, Desk, Person, Enquiry, ActivityLog, SiteContent, SiteSettings, SiteInfo, MediaFile
 from .serializers import (
     ClusterSerializer, DeskSerializer, PersonSerializer, EnquirySerializer,
     DeskAdminSerializer, PersonAdminSerializer, EnquiryAdminSerializer, ActivityLogSerializer, ClusterAdminSerializer,
-    SiteContentSerializer, SiteSettingsSerializer
-# SiteInfoSerializer and MediaFileSerializer temporarily commented out until migrations run
-# , SiteInfoSerializer, MediaFileSerializer
+    SiteContentSerializer, SiteSettingsSerializer, SiteInfoSerializer, MediaFileSerializer
 )
 
 User = get_user_model()
@@ -48,14 +44,14 @@ class EnquiryCreate(generics.CreateAPIView):
             except Exception: pass  # enquiry is already saved; never lose it to a mail failure
         return Response({"ok": True}, status=status.HTTP_201_CREATED)
 
-class SiteInfo(APIView):
+class SiteInfoView(APIView):
     """Registered particulars. Email is blank until the firm supplies one."""
     def get(self, request):
         # Try to get from database, fall back to defaults if none exists
         try:
-            from .models import SiteInfo
+            from .models import SiteInfo as SiteInfoModel
             from .serializers import SiteInfoSerializer
-            info = SiteInfo.objects.first()
+            info = SiteInfoModel.objects.first()
             if info:
                 serializer = SiteInfoSerializer(info)
                 return Response(serializer.data)
@@ -511,53 +507,52 @@ class SiteSettingsDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
         )
         return response
 
-# SiteInfo admin views temporarily commented out until migrations run
-# class SiteInfoListAdmin(generics.ListCreateAPIView):
-#     queryset = SiteInfo.objects.all()
-#     serializer_class = SiteInfoSerializer
-#     permission_classes = [IsAuthenticated]
-#
-#     def create(self, request, *args, **kwargs):
-#         response = super().create(request, *args, **kwargs)
-#         ActivityLog.objects.create(
-#             action=ActivityLog.ActionType.CREATE,
-#             content_type="siteinfo",
-#             object_id=response.data.get('id'),
-#             object_name=response.data.get('name'),
-#             description=f"Created site info: {response.data.get('name')}",
-#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
-#         )
-#         return response
-#
-# class SiteInfoDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = SiteInfo.objects.all()
-#     serializer_class = SiteInfoSerializer
-#     permission_classes = [IsAuthenticated]
-#
-#     def update(self, request, *args, **kwargs):
-#         response = super().update(request, *args, **kwargs)
-#         info = self.get_object()
-#         ActivityLog.objects.create(
-#             action=ActivityLog.ActionType.UPDATE,
-#             content_type="siteinfo",
-#             object_id=info.id,
-#             object_name=info.name,
-#             description=f"Updated site info: {info.name}",
-#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
-#         )
-#         return response
-#
-#     def destroy(self, request, *args, **kwargs):
-#         info = self.get_object()
-#         ActivityLog.objects.create(
-#             action=ActivityLog.ActionType.DELETE,
-#             content_type="siteinfo",
-#             object_id=info.id,
-#             object_name=info.name,
-#             description=f"Deleted site info: {info.name}",
-#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
-#         )
-#         return super().destroy(request, *args, **kwargs)
+class SiteInfoListAdmin(generics.ListCreateAPIView):
+    queryset = SiteInfo.objects.all()
+    serializer_class = SiteInfoSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.CREATE,
+            content_type="siteinfo",
+            object_id=response.data.get('id'),
+            object_name=response.data.get('name'),
+            description=f"Created site info: {response.data.get('name')}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+class SiteInfoDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SiteInfo.objects.all()
+    serializer_class = SiteInfoSerializer
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        info = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.UPDATE,
+            content_type="siteinfo",
+            object_id=info.id,
+            object_name=info.name,
+            description=f"Updated site info: {info.name}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+    def destroy(self, request, *args, **kwargs):
+        info = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.DELETE,
+            content_type="siteinfo",
+            object_id=info.id,
+            object_name=info.name,
+            description=f"Deleted site info: {info.name}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return super().destroy(request, *args, **kwargs)
 
 def spa(request, path=""):
     """Serve the React app for its client-side routes. Unknown paths get the same shell with a real 404 status."""
@@ -566,84 +561,83 @@ def spa(request, path=""):
         raise Http404("Frontend not built")
     return FileResponse(open(index, "rb"), content_type="text/html", status=200 if path.strip("/") in KNOWN_ROUTES else 404)
 
-# Media Management Views - temporarily commented out until migrations run
-# class MediaFileListAdmin(generics.ListCreateAPIView):
-#     queryset = MediaFile.objects.all()
-#     serializer_class = MediaFileSerializer
-#     permission_classes = [IsAuthenticated]
-#
-#     def create(self, request, *args, **kwargs):
-#         uploaded_file = request.FILES.get('file')
-#         if not uploaded_file:
-#             return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
-#
-#         # Get file info
-#         filename = uploaded_file.name
-#         file_size = uploaded_file.size
-#         file_type = uploaded_file.content_type or 'application/octet-stream'
-#
-#         # Categorize file type
-#         if file_type.startswith('image/'):
-#             file_type = 'image'
-#         elif file_type.startswith('video/'):
-#             file_type = 'video'
-#         elif file_type.startswith('audio/'):
-#             file_type = 'audio'
-#         elif file_type in ['application/pdf']:
-#             file_type = 'document'
-#         else:
-#             file_type = 'file'
-#
-#         media_file = MediaFile.objects.create(
-#             file=uploaded_file,
-#             filename=filename,
-#             file_type=file_type,
-#             file_size=file_size,
-#             uploaded_by=request.user.username if request.user.is_authenticated else 'Anonymous',
-#             alt_text=request.data.get('alt_text', ''),
-#             description=request.data.get('description', '')
-#         )
-#
-#         ActivityLog.objects.create(
-#             action=ActivityLog.ActionType.CREATE,
-#             content_type="media",
-#             object_id=media_file.id,
-#             object_name=filename,
-#             description=f"Uploaded media file: {filename}",
-#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
-#         )
-#
-#         serializer = self.get_serializer(media_file)
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#
-# class MediaFileDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = MediaFile.objects.all()
-#     serializer_class = MediaFileSerializer
-#     permission_classes = [IsAuthenticated]
-#
-#     def update(self, request, *args, **kwargs):
-#         response = super().update(request, *args, **kwargs)
-#         media_file = self.get_object()
-#         ActivityLog.objects.create(
-#             action=ActivityLog.ActionType.UPDATE,
-#             content_type="media",
-#             object_id=media_file.id,
-#             object_name=media_file.filename,
-#             description=f"Updated media file: {media_file.filename}",
-#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
-#         )
-#         return response
-#
-#     def destroy(self, request, *args, **kwargs):
-#         media_file = self.get_object()
-#         filename = media_file.filename
-#         media_file.file.delete(save=False)  # Delete the actual file
-#         ActivityLog.objects.create(
-#             action=ActivityLog.ActionType.DELETE,
-#             content_type="media",
-#             object_id=media_file.id,
-#             object_name=filename,
-#             description=f"Deleted media file: {filename}",
-#             user=request.user.username if request.user.is_authenticated else 'Anonymous'
-#         )
-#         return super().destroy(request, *args, **kwargs)
+class MediaFileListAdmin(generics.ListCreateAPIView):
+    queryset = MediaFile.objects.all()
+    serializer_class = MediaFileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        uploaded_file = request.FILES.get('file')
+        if not uploaded_file:
+            return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Get file info
+        filename = uploaded_file.name
+        file_size = uploaded_file.size
+        file_type = uploaded_file.content_type or 'application/octet-stream'
+
+        # Categorize file type
+        if file_type.startswith('image/'):
+            file_type = 'image'
+        elif file_type.startswith('video/'):
+            file_type = 'video'
+        elif file_type.startswith('audio/'):
+            file_type = 'audio'
+        elif file_type in ['application/pdf']:
+            file_type = 'document'
+        else:
+            file_type = 'file'
+
+        media_file = MediaFile.objects.create(
+            file=uploaded_file,
+            filename=filename,
+            file_type=file_type,
+            file_size=file_size,
+            uploaded_by=request.user.username if request.user.is_authenticated else 'Anonymous',
+            alt_text=request.data.get('alt_text', ''),
+            description=request.data.get('description', '')
+        )
+
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.CREATE,
+            content_type="media",
+            object_id=media_file.id,
+            object_name=filename,
+            description=f"Uploaded media file: {filename}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+
+        serializer = self.get_serializer(media_file)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class MediaFileDetailAdmin(generics.RetrieveUpdateDestroyAPIView):
+    queryset = MediaFile.objects.all()
+    serializer_class = MediaFileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        media_file = self.get_object()
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.UPDATE,
+            content_type="media",
+            object_id=media_file.id,
+            object_name=media_file.filename,
+            description=f"Updated media file: {media_file.filename}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return response
+
+    def destroy(self, request, *args, **kwargs):
+        media_file = self.get_object()
+        filename = media_file.filename
+        media_file.file.delete(save=False)  # Delete the actual file
+        ActivityLog.objects.create(
+            action=ActivityLog.ActionType.DELETE,
+            content_type="media",
+            object_id=media_file.id,
+            object_name=filename,
+            description=f"Deleted media file: {filename}",
+            user=request.user.username if request.user.is_authenticated else 'Anonymous'
+        )
+        return super().destroy(request, *args, **kwargs)

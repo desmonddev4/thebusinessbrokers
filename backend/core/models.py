@@ -131,43 +131,42 @@ class SiteSettings(models.Model):
     def __str__(self):
         return self.key
 
-# SiteInfo and MediaFile temporarily commented out until migrations run
-# class SiteInfo(models.Model):
-#     """Company particulars and contact information"""
-#     name = models.CharField(max_length=200, default="Top Business Brokers Consult Limited")
-#     registration = models.CharField(max_length=50, default="CS054812019")
-#     incorporated = models.CharField(max_length=100, default="19 March 2007")
-#     company_type = models.CharField(max_length=100, default="Private limited company")
-#     address = models.TextField(default="Near Liberation Christian Centre, Bomso, Kumasi, Ashanti Region, Ghana")
-#     post = models.CharField(max_length=200, default="P. O. Box UP 629, KNUST, Kumasi")
-#     phones = models.JSONField(default=list, blank=True)
-#     tin = models.CharField(max_length=50, default="C0022801235")
-#     auditors = models.CharField(max_length=200, default="Bridgewater Consulting, Kumasi")
-#     email = models.EmailField(blank=True, default="")
-#     updated_at = models.DateTimeField(auto_now=True)
-#
-#     class Meta:
-#         verbose_name = "site information"
-#         verbose_name_plural = "site information"
-#
-#     def __str__(self):
-#         return self.name
-#
-# class MediaFile(models.Model):
-#     """Track uploaded media files for gallery management"""
-#     file = models.FileField(upload_to="media/")
-#     filename = models.CharField(max_length=255)
-#     file_type = models.CharField(max_length=50, help_text="e.g., image, document")
-#     file_size = models.PositiveIntegerField(help_text="Size in bytes")
-#     uploaded_at = models.DateTimeField(auto_now_add=True)
-#     uploaded_by = models.CharField(max_length=150, blank=True, help_text="Username of uploader")
-#     alt_text = models.CharField(max_length=255, blank=True, help_text="Alt text for images")
-#     description = models.TextField(blank=True)
-#
-#     class Meta:
-#         ordering = ["-uploaded_at"]
-#         verbose_name = "media file"
-#         verbose_name_plural = "media files"
-#
-#     def __str__(self):
-#         return self.filename
+class SiteInfo(models.Model):
+    """Company particulars and contact information"""
+    name = models.CharField(max_length=200, default="Top Business Brokers Consult Limited")
+    registration = models.CharField(max_length=50, default="CS054812019")
+    incorporated = models.CharField(max_length=100, default="19 March 2007")
+    company_type = models.CharField(max_length=100, default="Private limited company")
+    address = models.TextField(default="Near Liberation Christian Centre, Bomso, Kumasi, Ashanti Region, Ghana")
+    post = models.CharField(max_length=200, default="P. O. Box UP 629, KNUST, Kumasi")
+    phones = models.JSONField(default=list, blank=True)
+    tin = models.CharField(max_length=50, default="C0022801235")
+    auditors = models.CharField(max_length=200, default="Bridgewater Consulting, Kumasi")
+    email = models.EmailField(blank=True, default="")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "site information"
+        verbose_name_plural = "site information"
+
+    def __str__(self):
+        return self.name
+
+class MediaFile(models.Model):
+    """Track uploaded media files for gallery management"""
+    file = models.FileField(upload_to="media/")
+    filename = models.CharField(max_length=255)
+    file_type = models.CharField(max_length=50, help_text="e.g., image, document")
+    file_size = models.PositiveIntegerField(help_text="Size in bytes")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_by = models.CharField(max_length=150, blank=True, help_text="Username of uploader")
+    alt_text = models.CharField(max_length=255, blank=True, help_text="Alt text for images")
+    description = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ["-uploaded_at"]
+        verbose_name = "media file"
+        verbose_name_plural = "media files"
+
+    def __str__(self):
+        return self.filename
